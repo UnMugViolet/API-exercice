@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AddressEntity } from './entities/address.entity';
+
 
 @Injectable()
 export class AddressService {
-  create(createAddressDto: CreateAddressDto) {
-    return 'This action adds a new address';
+  constructor(
+    @InjectRepository(AddressEntity)
+    private readonly addressRepository: Repository<AddressEntity>
+  ) {}
+
+  async create(createAddressDto: CreateAddressDto): Promise<AddressEntity> {
+    const newAddress = this.addressRepository.create(createAddressDto);
+    return await this.addressRepository.save(newAddress);
   }
 
   findAll() {
-    return `This action returns all address`;
+    return this.addressRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} address`;
+    return this.addressRepository.findOneBy({id});
   }
 
   update(id: number, updateAddressDto: UpdateAddressDto) {
-    return `This action updates a #${id} address`;
+    return this.addressRepository.update(id, updateAddressDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} address`;
+    this.addressRepository.delete(id);
   }
 }
