@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { Building } from './building.entity';
+import { BuildingEntity } from '../../building/entities/building.entity';
 
 @Entity('common_facility')
-export class CommonFacility {
+export class CommonFacilityEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,6 +12,6 @@ export class CommonFacility {
   @Column({ nullable: true })
   lastInspection: Date;
 
-  @ManyToMany(() => Building, building => building.commonFacilities)
-  buildings: Building[];
+  @ManyToMany(() => BuildingEntity, building => building.commonFacilities)
+  buildings: BuildingEntity[];
 }
