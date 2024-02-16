@@ -12,7 +12,7 @@ export class BuildingEntity {
   name: string;
 
   @Column()
-  buildingDate: Date;
+  buildingCreationDate: Date;
 
   @OneToOne(() => AddressEntity, address => address.building)
   address: AddressEntity;

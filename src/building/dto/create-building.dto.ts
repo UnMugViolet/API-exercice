@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
 import { CreateAddressDto } from 'src/address/dto/create-address.dto';
+import { CreateCommonFacilityDto } from 'src/common-facility/dto/create-common-facility.dto';
 
 export class CreateBuildingDto {
   @ApiProperty()
@@ -11,7 +12,7 @@ export class CreateBuildingDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  buildingDate: Date;
+  buildingCreationDate: Date;
   
   @ApiProperty()
   @IsNotEmpty()
@@ -25,6 +26,5 @@ export class CreateBuildingDto {
   
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  commonFacilityToBuilding: string;
+  commonFacilityToBuilding: CreateCommonFacilityDto[];
 }

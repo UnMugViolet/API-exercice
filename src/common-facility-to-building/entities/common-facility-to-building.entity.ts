@@ -15,5 +15,4 @@ export class CommonFacilityToBuilding {
 
   @ManyToOne(() => BuildingEntity, building => building.commonFacilityToBuilding)
   building: BuildingEntity;
-
 }

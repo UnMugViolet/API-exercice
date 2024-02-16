@@ -4,6 +4,7 @@ import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressEntity } from './entities/address.entity';
+import { NotFoundException } from '@nestjs/common';
 
 
 @Injectable()
@@ -26,11 +27,14 @@ export class AddressService {
     return this.addressRepository.findOneBy({id});
   }
 
-  update(id: number, updateAddressDto: UpdateAddressDto) {
-    return this.addressRepository.update(id, updateAddressDto);
+  async update(id: number, updateAddressDto: UpdateAddressDto): Promise<AddressEntity> {
+    const address = await this.addressRepository.findOne({ where: { id } });
+    Object.assign(address, updateAddressDto);
+    return this.addressRepository.save(address);
   }
 
   remove(id: number) {
-    this.addressRepository.delete(id);
+    return this.addressRepository.delete(id);
   }
 }
+
