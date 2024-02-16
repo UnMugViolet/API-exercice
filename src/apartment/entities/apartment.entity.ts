@@ -3,6 +3,7 @@ import { BuildingEntity } from '../../building/entities/building.entity';
 import { OptionEntity } from '../../option/entities/option.entity';
 import { TenantEntity } from '../../tenant/entities/tenant.entity';
 import { OwnerEntity } from '../../owner/entities/owner.entity';
+import { ApartmentTypeEntity } from 'src/apartment-type/entities/apartment-type.entity';
 
 @Entity('apartment')
 export class ApartmentEntity {
@@ -13,7 +14,10 @@ export class ApartmentEntity {
   description: string;
 
   @Column()
-  type: string;
+  doorNumber: string;
+
+  @Column()
+  floorArea: number;
 
   @ManyToOne(() => BuildingEntity, building => building.apartments)
   building: BuildingEntity;
@@ -27,4 +31,7 @@ export class ApartmentEntity {
 
   @OneToMany(() => TenantEntity, tenant => tenant.apartment)
   tenants: TenantEntity[];
+
+  @ManyToOne(() => ApartmentTypeEntity, apartmentType => apartmentType.apartments)
+  apartmentType: ApartmentTypeEntity;
 }

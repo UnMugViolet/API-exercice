@@ -15,6 +15,10 @@ import { CommonFacilityModule } from './common-facility/common-facility.module';
 import { OptionModule } from './option/option.module';
 import { OwnerModule } from './owner/owner.module';
 import { AddressEntity } from './address/entities/address.entity';
+import { ApartmentTypeModule } from './apartment-type/apartment-type.module';
+import { CommonFacilityToBuildingModule } from './common-facility-to-building/common-facility-to-building.module';
+import { CommonFacilityToBuilding } from './common-facility-to-building/entities/common-facility-to-building.entity';
+import { ApartmentTypeEntity } from './apartment-type/entities/apartment-type.entity';
 
 dotenv.config();
 
@@ -32,9 +36,11 @@ dotenv.config();
         BuildingEntity, 
         CommonFacilityEntity, 
         ApartmentEntity, 
+        ApartmentTypeEntity,
         OwnerEntity, 
         OptionEntity, 
-        TenantEntity
+        TenantEntity,
+        CommonFacilityToBuilding
       ],
       synchronize: true,
     }),
@@ -44,6 +50,8 @@ dotenv.config();
     CommonFacilityModule,
     OptionModule,
     OwnerModule,
+    ApartmentTypeModule,
+    CommonFacilityToBuildingModule,
   ],
 })
 export class AppModule {}
