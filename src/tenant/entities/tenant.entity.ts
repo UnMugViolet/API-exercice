@@ -7,6 +7,9 @@ export class TenantEntity extends PersonEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  isMainTenant: boolean;
+
   @ManyToOne(() => ApartmentEntity, apartment => apartment.tenants)
   apartment: ApartmentEntity;
 }

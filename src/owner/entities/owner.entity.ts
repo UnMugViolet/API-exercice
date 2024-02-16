@@ -7,6 +7,12 @@ export class OwnerEntity extends PersonEntity{
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  bankAccountNumber: string;
+
+  @Column()
+  isVATpayer: boolean;
+
   @OneToMany(() => ApartmentEntity, apartment => apartment.owner)
   apartments: ApartmentEntity[];
 }
