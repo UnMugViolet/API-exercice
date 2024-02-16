@@ -8,7 +8,7 @@ export class BuildingController {
   constructor(private readonly buildingService: BuildingService) {}
 
   @Post()
-  create(@Body() createBuildingDto: CreateBuildingDto) {
+  async create(@Body() createBuildingDto: CreateBuildingDto) {
     return this.buildingService.create(createBuildingDto);
   }
 

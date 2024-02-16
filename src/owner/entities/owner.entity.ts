@@ -8,7 +8,7 @@ export class OwnerEntity extends PersonEntity{
   id: number;
 
   @Column()
-  bankAccountNumber: string;
+  bankAccountNumber: string;'class-validator'
 
   @Column()
   isVATpayer: boolean;

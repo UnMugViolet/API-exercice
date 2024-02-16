@@ -8,7 +8,10 @@ export class AddressEntity {
   id: number;
 
   @Column()
-  streetNumber: string;
+  streetNumber: number;
+
+  @Column({nullable: true})
+  label: string;
 
   @Column()
   streetName: string;
