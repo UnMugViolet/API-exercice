@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CommonFacilityService } from './common-facility.service';
 import { CreateCommonFacilityDto } from './dto/create-common-facility.dto';
 import { UpdateCommonFacilityDto } from './dto/update-common-facility.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Common Facility')
 @Controller('common-facility')
 export class CommonFacilityController {
   constructor(private readonly commonFacilityService: CommonFacilityService) {}

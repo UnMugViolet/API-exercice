@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { OptionService } from './option.service';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Option')
 @Controller('option')
 export class OptionController {
   constructor(private readonly optionService: OptionService) {}
