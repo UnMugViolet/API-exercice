@@ -1,16 +1,10 @@
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export enum OptionType {
-  Balcony = 'Balcony',
-  PrivateCellar = 'PrivateCellar',
-  ParkingPlace = 'ParkingPlace',
-}
-
 export class CreateOptionDto {
-  @ApiProperty({ enum: OptionType })
+  @ApiProperty()
   @IsString()
-  type: OptionType;
+  type: string;
 
   @ApiProperty()
   @IsString()
