@@ -1,37 +1,43 @@
 import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
-import { BuildingEntity } from '../../building/entities/building.entity';
-import { OptionEntity } from '../../option/entities/option.entity';
-import { TenantEntity } from '../../tenant/entities/tenant.entity';
-import { OwnerEntity } from '../../owner/entities/owner.entity';
-import { ApartmentTypeEntity } from 'src/apartment-type/entities/apartment-type.entity';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { CreateBuildingDto } from 'src/building/dto/create-building.dto';
+import { CreateOwnerDto } from 'src/owner/dto/create-owner.dto';
+import { CreateOptionDto } from 'src/option/dto/create-option.dto';
+import { CreateTenantDto } from 'src/tenant/dto/create-tenant.dto';
+import { CreateApartmentTypeDto } from 'src/apartment-type/dto/create-apartment-type.dto';
 
 export class CreateApartmentDto {
+  @ApiProperty()
   @IsString()
   description: string;
 
+  @ApiProperty()
   @IsString()
   doorNumber: string;
 
+  @ApiProperty()
   @IsNumber()
   floorArea: number;
 
+  @ApiPropertyOptional({ type: () => CreateBuildingDto })
   @IsOptional()
-  @IsNumber()
-  building: BuildingEntity;
+  building: CreateBuildingDto;
 
+  @ApiPropertyOptional({ type: () => CreateOwnerDto })
   @IsOptional()
-  @IsNumber()
-  owner: OwnerEntity;
+  owner: CreateOwnerDto;
 
+  @ApiPropertyOptional({ type: () => [CreateOptionDto] })
   @IsOptional()
   @IsArray()
-  options: OptionEntity[];
+  options: CreateOptionDto[];
 
+  @ApiPropertyOptional({ type: () => [CreateTenantDto] })
   @IsOptional()
   @IsArray()
-  tenants: TenantEntity[];
+  tenants: CreateTenantDto[];
 
+  @ApiPropertyOptional({ type: () => CreateApartmentTypeDto })
   @IsOptional()
-  @IsNumber()
-  apartmentType: ApartmentTypeEntity;
+  apartmentType: CreateApartmentTypeDto;
 }
