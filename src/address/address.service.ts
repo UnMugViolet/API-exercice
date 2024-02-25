@@ -4,7 +4,6 @@ import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressEntity } from './entities/address.entity';
-import { NotFoundException } from '@nestjs/common';
 
 
 @Injectable()

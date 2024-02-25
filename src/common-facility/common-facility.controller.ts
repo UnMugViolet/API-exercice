@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException} from '@nestjs/common';
 import { CommonFacilityService } from './common-facility.service';
 import { CreateCommonFacilityDto } from './dto/create-common-facility.dto';
 import { UpdateCommonFacilityDto } from './dto/update-common-facility.dto';
@@ -15,22 +15,38 @@ export class CommonFacilityController {
   }
 
   @Get()
-  findAll() {
-    return this.commonFacilityService.findAll();
+  async findAll() {
+    const commonFacility = await this.commonFacilityService.findAll();
+    if (!commonFacility || commonFacility.length === 0) {
+      throw new NotFoundException('No common facility found');
+    }
+    return commonFacility;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commonFacilityService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const commonFacilities = await this.commonFacilityService.findOne(+id);
+    if (!commonFacilities) {
+      throw new NotFoundException(`Common facility with ID ${id} not found`);
+    }
+    return commonFacilities;
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommonFacilityDto: UpdateCommonFacilityDto) {
-    return this.commonFacilityService.update(+id, updateCommonFacilityDto);
+    const commonFacility = this.commonFacilityService.update(+id, updateCommonFacilityDto);
+    if (!commonFacility) {
+      throw new NotFoundException(`Common facility with ID ${id} not found`);
+    }
+    return commonFacility;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commonFacilityService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const commonFacility = await this.commonFacilityService.remove(+id);
+    if (!commonFacility) {
+      throw new NotFoundException(`Common facility with ID ${id} not found`);
+    }
+    return commonFacility;
   }
 }

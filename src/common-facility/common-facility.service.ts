@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommonFacilityDto } from './dto/create-common-facility.dto';
 import { UpdateCommonFacilityDto } from './dto/update-common-facility.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CommonFacilityEntity } from './entities/common-facility.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CommonFacilityService {
-  create(createCommonFacilityDto: CreateCommonFacilityDto) {
-    return 'This action adds a new commonFacility';
+
+  constructor(
+    @InjectRepository(CommonFacilityEntity)
+    private readonly commonFacilityRepository: Repository<CommonFacilityEntity>
+  ) {}
+
+  async create(createCommonFacilityDto: CreateCommonFacilityDto) {
+    const newCommonFacility = this.commonFacilityRepository.create(createCommonFacilityDto);
+    return await this.commonFacilityRepository.save(newCommonFacility);
   }
 
   findAll() {
-    return `This action returns all commonFacility`;
+    return this.commonFacilityRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} commonFacility`;
+    return this.commonFacilityRepository.findOne({ where: { id } });;
   }
 
-  update(id: number, updateCommonFacilityDto: UpdateCommonFacilityDto) {
-    return `This action updates a #${id} commonFacility`;
+  async update(id: number, updateCommonFacilityDto: UpdateCommonFacilityDto) {
+    const commonFacility = await this.commonFacilityRepository.findOne({ where: { id } });
+    Object.assign(commonFacility, updateCommonFacilityDto);
+    return this.commonFacilityRepository.save(commonFacility);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} commonFacility`;
+    return this.commonFacilityRepository.delete(id);
   }
 }

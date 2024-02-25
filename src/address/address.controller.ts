@@ -48,6 +48,5 @@ export class AddressController {
       throw new NotFoundException(`Address with ID ${id} not found`);
     }
     return this.addressService.remove(+id);
-
   }
 }

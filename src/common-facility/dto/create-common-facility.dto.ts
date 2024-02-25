@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiTags } from "@nestjs/swagger";
 import { IsString, IsDate, IsOptional } from "class-validator";
 
 export class CreateCommonFacilityDto {
