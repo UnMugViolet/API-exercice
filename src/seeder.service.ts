@@ -3,12 +3,15 @@ import { CreateApartmentTypeDto } from './apartment-type/dto/create-apartment-ty
 import { ApartmentTypeService } from './apartment-type/apartment-type.service';
 import { CommonFacilityService } from './common-facility/common-facility.service';
 import { CreateCommonFacilityDto } from './common-facility/dto/create-common-facility.dto';
+import { AddressService } from './address/address.service';
+import { CreateAddressDto } from './address/dto/create-address.dto';
 
 @Injectable()
 export class SeederService {
   constructor(
     private readonly apartmentTypeService: ApartmentTypeService,
-    private readonly commonFacilityService: CommonFacilityService
+    private readonly commonFacilityService: CommonFacilityService,
+    private readonly addressService: AddressService,
   ) {}
 
   async seedApartmentTypes() {
@@ -53,8 +56,30 @@ export class SeederService {
     }
   }
 
+  async seedAdresses() {
+    const addresses = [
+      { streetNumber: 123, label: null, streetName: 'Main', city: 'New York', zipCode: '10001' },
+      { streetNumber: 456, label: null, streetName: 'Pennsylvania', city: 'Washington', zipCode: '20004' },
+    ];
+    
+    for(const address of addresses) {
+      // Check if the address already exists
+      const existingAddress = await this.addressService.findOneByStreetNumberAndStreetName(address.streetNumber, address.streetName);
+      if (!existingAddress) {
+        const createAddressDto = new CreateAddressDto();
+        createAddressDto.streetNumber = address.streetNumber;
+        createAddressDto.label = address.label;
+        createAddressDto.streetName = address.streetName;
+        createAddressDto.city = address.city;
+        createAddressDto.zipCode = address.zipCode;
+        await this.addressService.create(createAddressDto);
+      }
+    }
+  }
+
   async seedAll() {
     await this.seedApartmentTypes();
     await this.seedCommonFacilities();
+    await this.seedAdresses();
   }
 }

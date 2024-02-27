@@ -26,6 +26,10 @@ export class AddressService {
     return this.addressRepository.findOneBy({id});
   }
 
+  async findOneByStreetNumberAndStreetName(streetNumber: number, streetName: string): Promise<AddressEntity | undefined> {
+    return this.addressRepository.findOne({ where: { streetNumber, streetName } });
+  }
+
   async update(id: number, updateAddressDto: UpdateAddressDto): Promise<AddressEntity> {
     const address = await this.addressRepository.findOne({ where: { id } });
     Object.assign(address, updateAddressDto);
