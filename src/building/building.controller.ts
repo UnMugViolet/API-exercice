@@ -15,22 +15,38 @@ export class BuildingController {
   }
 
   @Get()
-  findAll() {
-    return this.buildingService.findAll();
+  async findAll() {
+    const buildings = await this.buildingService.findAll();
+    if (!buildings || buildings.length === 0) {
+      return 'No building found';
+    }
+    return buildings;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.buildingService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const building = await this.buildingService.findOne(+id);
+    if (!building) {
+      return `Building with ID ${id} not found`;
+    }
+    return building;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBuildingDto: UpdateBuildingDto) {
-    return this.buildingService.update(+id, updateBuildingDto);
+  async update(@Param('id') id: string, @Body() updateBuildingDto: UpdateBuildingDto) {
+    const building = await this.buildingService.update(+id, updateBuildingDto);
+    if (!building) {
+      return `Building with ID ${id} not found`;
+    }
+    return building;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.buildingService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const building = await this.buildingService.remove(+id);
+    if (!building) {
+      return `Building with ID ${id} not found`;
+    }
+    return building;
   }
 }

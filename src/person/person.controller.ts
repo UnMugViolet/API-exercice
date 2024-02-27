@@ -15,22 +15,38 @@ export class PersonController {
   }
 
   @Get()
-  findAll() {
-    return this.personService.findAll();
+  async findAll() {
+    const persons = await this.personService.findAll();
+    if (!persons || persons.length === 0) {
+      return 'No persons found';
+    }
+    return persons;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const person = await this.personService.findOne(+id);
+    if (!person) {
+      return `Person with ID ${id} not found`;
+    }
+    return person;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-    return this.personService.update(+id, updatePersonDto);
+  async update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
+    const person = await this.personService.update(+id, updatePersonDto);
+    if (!person) {
+      return `Person with ID ${id} not found`;
+    }
+    return person;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const person = await  this.personService.remove(+id);
+    if (!person) {
+      return `Person with ID ${id} not found`;
+    }
+    return person;
   }
 }

@@ -15,22 +15,38 @@ export class OwnerController {
   }
 
   @Get()
-  findAll() {
-    return this.ownerService.findAll();
+  async findAll() {
+    const owners = await this.ownerService.findAll();
+    if (!owners || owners.length === 0) {
+      return 'No owner found';
+    }
+    return owners;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ownerService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const owner = await this.ownerService.findOne(+id);
+    if (!owner) {
+      return `Owner with ID ${id} not found`;
+    }
+    return owner;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOwnerDto: UpdateOwnerDto) {
-    return this.ownerService.update(+id, updateOwnerDto);
+  async update(@Param('id') id: string, @Body() updateOwnerDto: UpdateOwnerDto) {
+    const owner = await this.ownerService.update(+id, updateOwnerDto);
+    if (!owner) {
+      return `Owner with ID ${id} not found`;
+    }
+    return owner;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ownerService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const owner = await this.ownerService.remove(+id);
+    if (!owner) {
+      return 'Owner with ID ${id} not found'; 
+    }
+    return owner;
   }
 }

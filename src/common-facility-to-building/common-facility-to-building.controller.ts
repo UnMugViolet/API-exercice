@@ -15,22 +15,38 @@ export class CommonFacilityToBuildingController {
   }
 
   @Get()
-  findAll() {
-    return this.commonFacilityToBuildingService.findAll();
+  async findAll() {
+    const commonFaciliesToBuilding = await this.commonFacilityToBuildingService.findAll();
+    if (!commonFaciliesToBuilding || commonFaciliesToBuilding.length === 0) {
+      return 'There isn\'t any common facility to building';
+    }
+    return commonFaciliesToBuilding;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commonFacilityToBuildingService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const commonFacilityToBuilding = await this.commonFacilityToBuildingService.findOne(+id);
+    if (!commonFacilityToBuilding) {
+      return `Common facility to building with ID ${id} not found`;
+    }
+    return commonFacilityToBuilding;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommonFacilityToBuildingDto: UpdateCommonFacilityToBuildingDto) {
-    return this.commonFacilityToBuildingService.update(+id, updateCommonFacilityToBuildingDto);
+  async update(@Param('id') id: string, @Body() updateCommonFacilityToBuildingDto: UpdateCommonFacilityToBuildingDto) {
+    const commonFacilityToBuilding = await this.commonFacilityToBuildingService.update(+id, updateCommonFacilityToBuildingDto);
+    if (!commonFacilityToBuilding) {
+      return `Common facility to building with ID ${id} not found`;
+    }
+    return commonFacilityToBuilding;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commonFacilityToBuildingService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const commonFacilityToBuilding = await this.commonFacilityToBuildingService.remove(+id);
+    if (!commonFacilityToBuilding) {
+      return `Common facility to building with ID ${id} not found`;
+    }
+    return commonFacilityToBuilding;
   }
 }

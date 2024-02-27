@@ -15,22 +15,38 @@ export class ApartmentTypeController {
   }
 
   @Get()
-  findAll() {
-    return this.apartmentTypeService.findAll();
+  async findAll() {
+    const apartmentTypes = await this.apartmentTypeService.findAll();
+    if (!apartmentTypes || apartmentTypes.length === 0) {
+      return 'No apartment types found';
+    }
+    return apartmentTypes;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.apartmentTypeService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const apartmentType = await this.apartmentTypeService.findOne(+id);
+    if (!apartmentType) {
+      return `Apartment type with ID ${id} not found`;
+    }
+    return apartmentType;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateApartmentTypeDto: UpdateApartmentTypeDto) {
-    return this.apartmentTypeService.update(+id, updateApartmentTypeDto);
+  async update(@Param('id') id: string, @Body() updateApartmentTypeDto: UpdateApartmentTypeDto) {
+    const apartmentType = await this.apartmentTypeService.update(+id, updateApartmentTypeDto);
+    if (!apartmentType) {
+      return `Apartment type with ID ${id} not found`;
+    }
+    return apartmentType;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.apartmentTypeService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const apartmentType = await this.apartmentTypeService.remove(+id);
+    if (!apartmentType) {
+      return `Apartment type with ID ${id} not found`;
+    }
+    return apartmentType;
   }
 }

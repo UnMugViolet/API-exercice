@@ -15,22 +15,38 @@ export class OptionController {
   }
 
   @Get()
-  findAll() {
-    return this.optionService.findAll();
+  async findAll() {
+    const options = await this.optionService.findAll();
+    if (!options || options.length === 0) {
+      return 'No option found';
+    }
+    return options;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.optionService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const option = await this.optionService.findOne(+id);
+    if (!option) {
+      return `Option with ID ${id} not found`;
+    }
+    return option;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
-    return this.optionService.update(+id, updateOptionDto);
+  async update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
+    const option = await this.optionService.update(+id, updateOptionDto);
+    if (!option) {
+      return `Option with ID ${id} not found`;
+    }
+    return option;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.optionService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const option = await this.optionService.remove(+id);
+    if (!option) {
+      return `Option with ID ${id} not found`;
+    }
+    return option;
   }
 }

@@ -13,22 +13,38 @@ export class TenantController {
   }
 
   @Get()
-  findAll() {
-    return this.tenantService.findAll();
+  async findAll() {
+    const tenants = await this.tenantService.findAll();
+    if (!tenants || tenants.length === 0) {
+      return 'No tenant found';
+    }
+    return tenants;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tenantService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const tenant = await this.tenantService.findOne(+id);
+    if (!tenant) {
+      return `Tenant with ID ${id} not found`;
+    }
+    return tenant;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
-    return this.tenantService.update(+id, updateTenantDto);
+  async update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
+    const tenant = await this.tenantService.update(+id, updateTenantDto);
+    if (!tenant) {
+      return `Tenant with ID ${id} not found`;
+    }
+    return tenant;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tenantService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const tenant = await this.tenantService.remove(+id);
+    if (!tenant) {
+      return `Tenant with ID ${id} not found`;
+    }
+    return tenant;
   }
 }
