@@ -1,23 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { CreateApartmentTypeDto } from './dto/create-apartment-type.dto';
 import { UpdateApartmentTypeDto } from './dto/update-apartment-type.dto';
+import { ApartmentTypeEntity } from './entities/apartment-type.entity';
 
 @Injectable()
 export class ApartmentTypeService {
-  create(createApartmentTypeDto: CreateApartmentTypeDto) {
-    return 'This action adds a new apartmentType';
+
+  constructor(
+    @InjectRepository(ApartmentTypeEntity)
+    private readonly apartmentRepository: Repository<ApartmentTypeEntity>
+  ) {}
+
+
+  async create(createApartmentTypeDto: CreateApartmentTypeDto) : Promise<ApartmentTypeEntity>{
+    const newApartmentType = this.apartmentRepository.create(createApartmentTypeDto as DeepPartial<ApartmentTypeEntity>);
+    return this.apartmentRepository.save(newApartmentType);
   }
 
   findAll() {
-    return `This action returns all apartmentType`;
+    return this.apartmentRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} apartmentType`;
+  async findOne(id: number) {
+    return await this.apartmentRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateApartmentTypeDto: UpdateApartmentTypeDto) {
-    return `This action updates a #${id} apartmentType`;
+  async update(id: number, updateApartmentTypeDto: UpdateApartmentTypeDto) {
+    const apartmentType = await this.apartmentRepository.findOne({ where: { id } });
+    Object.assign(apartmentType, updateApartmentTypeDto);
+    return this.apartmentRepository.save(apartmentType);
   }
 
   remove(id: number) {
