@@ -1,9 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { SeederService } from './seeder.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Lock seeder comment the two following lines
+  const seeder = app.get(SeederService);
+  await seeder.seedAll();
 
   const config = new DocumentBuilder()
     .setTitle('Cats example')

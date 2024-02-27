@@ -19,6 +19,7 @@ import { ApartmentTypeModule } from './apartment-type/apartment-type.module';
 import { CommonFacilityToBuildingModule } from './common-facility-to-building/common-facility-to-building.module';
 import { CommonFacilityToBuildingEntity } from './common-facility-to-building/entities/common-facility-to-building.entity';
 import { ApartmentTypeEntity } from './apartment-type/entities/apartment-type.entity';
+import { SeederService } from './seeder.service';
 
 dotenv.config();
 
@@ -52,6 +53,9 @@ dotenv.config();
     OwnerModule,
     ApartmentTypeModule,
     CommonFacilityToBuildingModule,
+  ],
+  providers: [
+    SeederService,
   ],
 })
 export class AppModule {}

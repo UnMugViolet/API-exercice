@@ -26,6 +26,10 @@ export class CommonFacilityService {
     return this.commonFacilityRepository.findOne({ where: { id } });;
   }
 
+  findOneByName(name: string) {
+    return this.commonFacilityRepository.findOne({ where: { name } });
+  }
+
   async update(id: number, updateCommonFacilityDto: UpdateCommonFacilityDto) {
     const commonFacility = await this.commonFacilityRepository.findOne({ where: { id } });
     Object.assign(commonFacility, updateCommonFacilityDto);

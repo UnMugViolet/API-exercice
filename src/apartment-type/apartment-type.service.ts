@@ -27,6 +27,10 @@ export class ApartmentTypeService {
     return await this.apartmentRepository.findOne({ where: { id } });
   }
 
+  async findOneByName(type: string) {
+    return await this.apartmentRepository.findOne({ where: { type } });
+  }
+
   async update(id: number, updateApartmentTypeDto: UpdateApartmentTypeDto) {
     const apartmentType = await this.apartmentRepository.findOne({ where: { id } });
     Object.assign(apartmentType, updateApartmentTypeDto);
