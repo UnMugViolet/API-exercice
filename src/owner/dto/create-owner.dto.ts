@@ -5,9 +5,9 @@ import { CreatePersonDto } from "src/person/dto/create-person.dto";
 export class CreateOwnerDto extends CreatePersonDto {
   @ApiProperty()
   @IsString()
-  accountNumber: string;
+  bankAccountNumber: string;
 
   @ApiProperty()
   @IsBoolean()
-  isSubjectToVat: boolean;
+  isVATpayer: boolean;
 }

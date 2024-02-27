@@ -4,9 +4,17 @@ import { IsString } from "class-validator";
 export class CreatePersonDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  lastName: string;
 
   @ApiProperty()
   @IsString()
   address: string;
+
+  @ApiProperty()
+  @IsString()
+  phoneNumber: string;
 }

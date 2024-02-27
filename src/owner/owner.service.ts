@@ -25,6 +25,10 @@ export class OwnerService {
     return await this.ownerRepository.findOne({ where: { id } });
   }
 
+  async findOneByBankAccountNumber(bankAccountNumber: string) {
+    return await this.ownerRepository.findOne({ where: { bankAccountNumber } });
+  }
+
   async update(id: number, updateOwnerDto: UpdateOwnerDto) {
     const owner = await this.ownerRepository.findOne({ where: { id } });
     Object.assign(owner, updateOwnerDto);

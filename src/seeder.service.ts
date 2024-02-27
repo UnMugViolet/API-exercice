@@ -5,6 +5,10 @@ import { CommonFacilityService } from './common-facility/common-facility.service
 import { CreateCommonFacilityDto } from './common-facility/dto/create-common-facility.dto';
 import { AddressService } from './address/address.service';
 import { CreateAddressDto } from './address/dto/create-address.dto';
+import { OptionService } from './option/option.service';
+import { CreateOptionDto } from './option/dto/create-option.dto';
+import { OwnerService } from './owner/owner.service';
+import { CreateOwnerDto } from './owner/dto/create-owner.dto';
 
 @Injectable()
 export class SeederService {
@@ -12,6 +16,8 @@ export class SeederService {
     private readonly apartmentTypeService: ApartmentTypeService,
     private readonly commonFacilityService: CommonFacilityService,
     private readonly addressService: AddressService,
+    private readonly optionService: OptionService,
+    private readonly ownerService: OwnerService,
   ) {}
 
   async seedApartmentTypes() {
@@ -60,6 +66,7 @@ export class SeederService {
     const addresses = [
       { streetNumber: 123, label: null, streetName: 'Main', city: 'New York', zipCode: '10001' },
       { streetNumber: 456, label: null, streetName: 'Pennsylvania', city: 'Washington', zipCode: '20004' },
+      { streetNumber: 789, label: 'bis', streetName: 'Constitution', city: 'Philadelphia', zipCode: '19106' },
     ];
     
     for(const address of addresses) {
@@ -73,6 +80,25 @@ export class SeederService {
         createAddressDto.city = address.city;
         createAddressDto.zipCode = address.zipCode;
         await this.addressService.create(createAddressDto);
+      }
+    }
+  }
+
+  async seedOptions() { 
+    const options = [
+      { name: 'Balcony', description: 'Balcony with a beautiful view' },
+      { name: 'Air Conditioning', description: 'Air conditioning in the apartment' },
+      { name: 'Pet Friendly', description: 'Pets are allowed in the apartment'},
+    ];
+
+    for(const option of options) {
+      // Check if the option already exists
+      const existingOption = await this.optionService.findOneByName(option.name);
+      if (!existingOption) {
+        const createOptionDto = new CreateOptionDto();
+        createOptionDto.name = option.name;
+        createOptionDto.description = option.description;
+        await this.optionService.create(createOptionDto);
       }
     }
   }

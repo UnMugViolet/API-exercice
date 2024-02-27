@@ -27,6 +27,10 @@ export class OptionService {
     return await this.optionRepository.findOne({ where: { id } });
   }
 
+  async findOneByName(name: string) {
+    return await this.optionRepository.findOne({ where: { name } });
+  }
+
   async update(id: number, updateOptionDto: UpdateOptionDto) {
     const option = await this.optionRepository.findOne({ where: { id } });
     Object.assign(option, updateOptionDto);
