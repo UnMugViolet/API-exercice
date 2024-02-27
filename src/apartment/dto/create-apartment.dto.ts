@@ -19,6 +19,10 @@ export class CreateApartmentDto {
   @IsNumber()
   floorArea: number;
 
+  @ApiProperty()
+  @IsNumber()
+  rent: number;
+
   @ApiPropertyOptional({ type: () => CreateBuildingDto })
   @IsOptional()
   building: CreateBuildingDto;
