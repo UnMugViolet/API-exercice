@@ -8,5 +8,5 @@ export class CreateApartmentTypeDto {
 
   @ApiProperty()
   @IsNumber()
-  maxOccupants: number;
+  maxOccupancy: number;
 }
