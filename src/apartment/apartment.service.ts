@@ -24,7 +24,7 @@ export class ApartmentService {
   }
 
   async findOne(id: number): Promise<ApartmentEntity> {
-    return this.apartmentRepository.findOne({ where: { id } });
+    return await this.apartmentRepository.findOne({ where: { id } });
   }
 
   async update(id: number, updateApartmentDto: UpdateApartmentDto) : Promise<ApartmentEntity>{
