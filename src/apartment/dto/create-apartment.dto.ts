@@ -23,25 +23,6 @@ export class CreateApartmentDto {
   @IsNumber()
   rent: number;
 
-  @ApiPropertyOptional({ type: () => CreateBuildingDto })
-  @IsOptional()
-  building: CreateBuildingDto;
-
-  @ApiPropertyOptional({ type: () => CreateOwnerDto })
-  @IsOptional()
-  owner: CreateOwnerDto;
-
-  @ApiPropertyOptional({ type: () => [CreateOptionDto] })
-  @IsOptional()
-  @IsArray()
-  options: CreateOptionDto[];
-
-  @ApiPropertyOptional({ type: () => [CreateTenantDto] })
-  @IsOptional()
-  @IsArray()
-  tenants: CreateTenantDto[];
-
-  @ApiPropertyOptional({ type: () => CreateApartmentTypeDto })
-  @IsOptional()
-  apartmentType: CreateApartmentTypeDto;
+  @ApiProperty()
+  apartmentType: number;
 }

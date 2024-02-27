@@ -7,9 +7,11 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Apartment')
 @Controller('apartment')
 export class ApartmentController {
-  constructor(private readonly apartmentService: ApartmentService) {}
+  constructor(
+    private readonly apartmentService: ApartmentService
+  ) {}
 
-  @Post()
+  @Post('createApartmentWithType')
   create(@Body() createApartmentDto: CreateApartmentDto) {
     return this.apartmentService.create(createApartmentDto);
   }
