@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommonFacilityToBuildingDto } from './dto/create-common-facility-to-building.dto';
 import { UpdateCommonFacilityToBuildingDto } from './dto/update-common-facility-to-building.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CommonFacilityToBuildingEntity } from './entities/common-facility-to-building.entity';
+import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class CommonFacilityToBuildingService {
-  create(createCommonFacilityToBuildingDto: CreateCommonFacilityToBuildingDto) {
-    return 'This action adds a new commonFacilityToBuilding';
+
+  constructor(
+    @InjectRepository(CommonFacilityToBuildingEntity)
+    private readonly commonFacilityToBuildingRepository: Repository<CommonFacilityToBuildingEntity>
+  ) {}
+
+  async create(createCommonFacilityToBuildingDto: CreateCommonFacilityToBuildingDto) : Promise<CommonFacilityToBuildingEntity>{
+    const newCommonFacilityToBuilding = await this.commonFacilityToBuildingRepository.create(createCommonFacilityToBuildingDto as DeepPartial<CommonFacilityToBuildingEntity>);
+    return this.commonFacilityToBuildingRepository.save(newCommonFacilityToBuilding);
   }
 
   findAll() {
-    return `This action returns all commonFacilityToBuilding`;
+    return this.commonFacilityToBuildingRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} commonFacilityToBuilding`;
+  async findOne(id: number) {
+    return await this.commonFacilityToBuildingRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateCommonFacilityToBuildingDto: UpdateCommonFacilityToBuildingDto) {
-    return `This action updates a #${id} commonFacilityToBuilding`;
+  async update(id: number, updateCommonFacilityToBuildingDto: UpdateCommonFacilityToBuildingDto) {
+    const commonFacilityToBuilding = await this.commonFacilityToBuildingRepository.findOne({ where: { id } });
+    Object.assign(commonFacilityToBuilding, updateCommonFacilityToBuildingDto);
+    return this.commonFacilityToBuildingRepository.save(commonFacilityToBuilding);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} commonFacilityToBuilding`;
+    return this.commonFacilityToBuildingRepository.delete(id);
   }
 }
