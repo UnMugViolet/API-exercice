@@ -38,6 +38,6 @@ export class ApartmentTypeService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} apartmentType`;
+    return this.apartmentRepository.delete(id);
   }
 }
