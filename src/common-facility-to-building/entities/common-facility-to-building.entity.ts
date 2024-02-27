@@ -3,7 +3,7 @@ import { BuildingEntity } from "../../building/entities/building.entity";
 import { CommonFacilityEntity } from "../../common-facility/entities/common-facility.entity";
 
 @Entity('common_facility_to_building')
-export class CommonFacilityToBuilding {
+export class CommonFacilityToBuildingEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

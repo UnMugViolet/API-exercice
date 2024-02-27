@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, OneToOne } from 'typeorm';
 import { ApartmentEntity } from '../../apartment/entities/apartment.entity';
 import { AddressEntity } from 'src/address/entities/address.entity';
-import { CommonFacilityToBuilding } from 'src/common-facility-to-building/entities/common-facility-to-building.entity';
+import { CommonFacilityToBuildingEntity } from 'src/common-facility-to-building/entities/common-facility-to-building.entity';
 
 @Entity('building')
 export class BuildingEntity {
@@ -20,6 +20,6 @@ export class BuildingEntity {
   @OneToMany(() => ApartmentEntity, apartment => apartment.building)
   apartments: ApartmentEntity[];
 
-  @OneToMany(() => CommonFacilityToBuilding, commonFacilityToBuilding => commonFacilityToBuilding.commonFacility)
-  commonFacilityToBuilding: CommonFacilityToBuilding[];
+  @OneToMany(() => CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.commonFacility)
+  commonFacilityToBuilding: CommonFacilityToBuildingEntity[];
 }

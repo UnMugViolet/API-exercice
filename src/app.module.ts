@@ -17,7 +17,7 @@ import { OwnerModule } from './owner/owner.module';
 import { AddressEntity } from './address/entities/address.entity';
 import { ApartmentTypeModule } from './apartment-type/apartment-type.module';
 import { CommonFacilityToBuildingModule } from './common-facility-to-building/common-facility-to-building.module';
-import { CommonFacilityToBuilding } from './common-facility-to-building/entities/common-facility-to-building.entity';
+import { CommonFacilityToBuildingEntity } from './common-facility-to-building/entities/common-facility-to-building.entity';
 import { ApartmentTypeEntity } from './apartment-type/entities/apartment-type.entity';
 
 dotenv.config();
@@ -40,7 +40,7 @@ dotenv.config();
         OwnerEntity, 
         OptionEntity, 
         TenantEntity,
-        CommonFacilityToBuilding
+        CommonFacilityToBuildingEntity,
       ],
       synchronize: true,
     }),
