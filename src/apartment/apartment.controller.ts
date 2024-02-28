@@ -3,6 +3,7 @@ import { ApartmentService } from './apartment.service';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
 import { UpdateApartmentDto } from './dto/update-apartment.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateApartmentWithOwnerDto } from './dto/create-apartment-with-owner.dto';
 
 @ApiTags('Apartment')
 @Controller('apartment')
@@ -14,6 +15,11 @@ export class ApartmentController {
   @Post('createApartmentWithType')
   create(@Body() createApartmentDto: CreateApartmentDto) {
     return this.apartmentService.create(createApartmentDto);
+  }
+
+  @Post('createApartmentWithOwner')
+  createApartmentWithOwner(@Body() createApartmentWithOwnerDto: CreateApartmentWithOwnerDto) {
+    return this.apartmentService.createApartmentWithOwner(createApartmentWithOwnerDto);
   }
 
   @Get()
