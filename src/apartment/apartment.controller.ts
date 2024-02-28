@@ -3,6 +3,8 @@ import { ApartmentService } from './apartment.service';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
 import { UpdateApartmentDto } from './dto/update-apartment.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateApartmentWithTenantDto } from './dto/create-apartment-with-tenant.dto';
+import { CreateApartmentWitOptionDto } from './dto/create-apartment-with-option.dto';
 
 @ApiTags('Apartment')
 @Controller('apartment')
@@ -11,9 +13,19 @@ export class ApartmentController {
     private readonly apartmentService: ApartmentService
   ) {}
 
+  @Post('assignOptionToApartment')
+  assignOptionToApartment(@Body() createApartmentWitOptionDto: CreateApartmentWitOptionDto) {
+    return this.apartmentService.assignOption(createApartmentWitOptionDto);
+  }
+
   @Post('createApartmentWithType')
-  create(@Body() createApartmentDto: CreateApartmentDto) {
-    return this.apartmentService.create(createApartmentDto);
+  createApartmentWithType(@Body() createApartmentDto: CreateApartmentDto) {
+    return this.apartmentService.createApartmentWithType(createApartmentDto);
+  }
+
+  @Post(':apartmentId/createTenantForApartment')
+  assignTenant(@Body() createApartmentWithTenantDto: CreateApartmentWithTenantDto, @Param('apartmentId') apartmentId: number) {
+    return this.apartmentService.assignTenant(apartmentId, createApartmentWithTenantDto);
   }
 
   @Get()
