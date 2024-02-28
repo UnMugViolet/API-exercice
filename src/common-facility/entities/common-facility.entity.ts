@@ -10,8 +10,8 @@ export class CommonFacilityEntity {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
-  lastInspection: Date;
+  @Column()
+  isSecure: boolean
 
   @OneToMany(()=> CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.building)
   commonFacilityToBuilding : CommonFacilityToBuildingEntity[];

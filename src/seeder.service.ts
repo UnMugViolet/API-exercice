@@ -43,11 +43,11 @@ export class SeederService {
 
   async seedCommonFacilities() {
     const commonFacilities = [
-      { name: 'Gym', lastInspection: new Date() },
-      { name: 'Swimming Pool', lastInspection: new Date() },
-      { name: 'Sauna', lastInspection: new Date() },
-      { name: 'Basketball Court', lastInspection: new Date() },
-      { name: 'Elevator', lastInspection: new Date()},
+      { name: 'Gym', lastInspection: new Date(), isSecure: true},
+      { name: 'Swimming Pool', lastInspection: new Date(), isSecure: false },
+      { name: 'Sauna', lastInspection: new Date(), isSecure: false },
+      { name: 'Basketball Court', lastInspection: new Date(), isSecure: false },
+      { name: 'Elevator', lastInspection: new Date(), isSecure: true},
     ];
 
     for (const commonFacility of commonFacilities) {
@@ -103,9 +103,32 @@ export class SeederService {
     }
   }
 
+  async seedOwners() {
+    const owners = [
+      { firstName: 'John', lastName: 'Doe', phoneNumber: '0618784005', bankAccountNumber: 'NL91ABNA0417164300', isVATpayer: false},
+      { firstName: 'Jane', lastName: 'Doe', phoneNumber: '0618784005', bankAccountNumber: 'NL91ABNA4080414423', isVATpayer: true},
+      { firstName: 'Jack', lastName: 'Doe', phoneNumber: '0618784005', bankAccountNumber: 'NL91ABNA7484514174', isVATpayer: true},
+    ];
+
+    for(const owner of owners) {
+      // Check if the owner already exists
+      const existingOwner = await this.ownerService.findOneByBankAccountNumber(owner.bankAccountNumber);
+      if (!existingOwner) {
+        const createOwnerDto = new CreateOwnerDto();
+        createOwnerDto.firstName = owner.firstName;
+        createOwnerDto.lastName = owner.lastName;
+        createOwnerDto.phoneNumber = owner.phoneNumber;
+        createOwnerDto.bankAccountNumber = owner.bankAccountNumber;
+        createOwnerDto.isVATpayer = owner.isVATpayer;
+        await this.ownerService.create(createOwnerDto);
+      }
+    }
+  }
+
   async seedAll() {
     await this.seedApartmentTypes();
     await this.seedCommonFacilities();
     await this.seedAdresses();
+    await this.seedOwners();
   }
 }

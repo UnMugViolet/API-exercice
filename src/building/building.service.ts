@@ -8,6 +8,9 @@ import { AssignApartmentToBuildingDto } from './dto/assign-apartment-to-building
 import { ApartmentEntity } from 'src/apartment/entities/apartment.entity';
 import { AddressEntity } from 'src/address/entities/address.entity';
 import { AssignAddressToBuildingDto } from './dto/assign-adress-to-building.dto';
+import { CommonFacilityEntity } from 'src/common-facility/entities/common-facility.entity';
+import { CommonFacilityToBuildingEntity } from 'src/common-facility-to-building/entities/common-facility-to-building.entity';
+import { AssignFacilityToBuildingDto } from './dto/assign-facility-to-building.dto';
 
 @Injectable()
 export class BuildingService {
@@ -19,6 +22,10 @@ export class BuildingService {
     private readonly apartmentRepository: Repository<ApartmentEntity>,
     @InjectRepository(AddressEntity)
     private readonly addressRepository: Repository<AddressEntity>,
+    @InjectRepository(CommonFacilityEntity)
+    private readonly commonFacilityRepository: Repository<CommonFacilityEntity>,
+    @InjectRepository(CommonFacilityToBuildingEntity)
+    private readonly commonFacilityToBuildingRepository: Repository<CommonFacilityToBuildingEntity>
   ) {}
 
   create(createBuildingDto: CreateBuildingDto) {
@@ -68,8 +75,40 @@ export class BuildingService {
     return address;
   }
 
+  async assignFacilities(buildingId: number, assignFacilitiesDto: AssignFacilityToBuildingDto) {
+    const { facilitiesId } = assignFacilitiesDto;
+
+    const building = await this.buildingRepository.findOne({ where: { id: buildingId } });
+    if (!building) {
+      throw new NotFoundException('Building not found');
+    }
+
+    const facilities = await this.commonFacilityRepository.findOne({ where: { id: facilitiesId } });
+    if (!facilities) {
+      throw new NotFoundException('Facilities not found');
+    }
+
+    const buildingFacilities = new CommonFacilityToBuildingEntity();
+    buildingFacilities.building = building;
+    buildingFacilities.commonFacility = facilities;
+
+    buildingFacilities.commonFacility.name = facilities.name;
+
+    if (facilities.isSecure) {
+      buildingFacilities.lastInspection = new Date();
+    } else if (buildingFacilities.lastInspection === null) {
+      buildingFacilities.lastInspection = building.buildingCreationDate;
+    } else {
+      buildingFacilities.lastInspection = null; // Set a default value
+    }
+
+    await this.commonFacilityToBuildingRepository.save(buildingFacilities);
+
+    return buildingFacilities;
+  }
+
   findAll() {
-    return this.buildingRepository.find({relations: ['apartments']});
+    return this.buildingRepository.find({relations: ['apartments', 'commonFacilityToBuilding.commonFacility']});
   }
 
   findOne(id: number) {

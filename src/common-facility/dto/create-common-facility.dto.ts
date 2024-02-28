@@ -9,4 +9,7 @@ export class CreateCommonFacilityDto {
   @ApiProperty()
   @IsDate()
   lastInspection: Date;
+
+  @ApiProperty()
+  isSecure: boolean;
 }
