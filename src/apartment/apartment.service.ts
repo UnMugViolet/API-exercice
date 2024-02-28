@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeepPartial } from 'typeorm';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
+import { CreateApartmentWithOwnerDto } from './dto/create-apartment-with-owner.dto';
 import { UpdateApartmentDto } from './dto/update-apartment.dto';
 import { ApartmentEntity } from './entities/apartment.entity';
 import { ApartmentTypeService } from 'src/apartment-type/apartment-type.service';
