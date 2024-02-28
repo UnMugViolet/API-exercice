@@ -28,11 +28,6 @@ export class ApartmentController {
     return this.apartmentService.assignTenant(apartmentId, createApartmentWithTenantDto);
   }
 
-  @Post('createApartmentWithOwner')
-  createApartmentWithOwner(@Body() createApartmentWithOwnerDto: CreateApartmentWithOwnerDto) {
-    return this.apartmentService.createApartmentWithOwner(createApartmentWithOwnerDto);
-  }
-
   @Get()
   async findAll() {
     const apartments = await this.apartmentService.findAll();

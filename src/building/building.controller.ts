@@ -3,6 +3,8 @@ import { BuildingService } from './building.service';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AssignApartmentToBuildingDto } from './dto/assign-apartment-to-building.dto';
+import { AssignAddressToBuildingDto } from './dto/assign-adress-to-building.dto';
 
 @ApiTags('Building')
 @Controller('building')
@@ -12,6 +14,16 @@ export class BuildingController {
   @Post()
   async create(@Body() createBuildingDto: CreateBuildingDto) {
     return this.buildingService.create(createBuildingDto);
+  }
+
+  @Post(':buildingId/assignApartment')
+  async assignApartment(@Body() assignApartmentDto: AssignApartmentToBuildingDto, @Param('buildingId') buildingId: number) {
+    return this.buildingService.assignApartment(buildingId, assignApartmentDto);
+  }
+
+  @Post(':buildingId/assignAdress')
+  async assignAddress(@Body() assignAdressDto: AssignAddressToBuildingDto, @Param('buildingId') buildingId: number) {
+    return this.buildingService.assignAddress(buildingId, assignAdressDto);
   }
 
   @Get()
