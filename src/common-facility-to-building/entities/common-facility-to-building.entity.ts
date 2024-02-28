@@ -8,7 +8,7 @@ export class CommonFacilityToBuildingEntity {
   id: number;
 
   @Column()
-  date: Date;
+  lastInspection: Date;
 
   @ManyToOne(() => CommonFacilityEntity, commonFacility => commonFacility.commonFacilityToBuilding)
   commonFacility: CommonFacilityEntity;
