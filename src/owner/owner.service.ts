@@ -3,13 +3,16 @@ import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OwnerEntity } from './entities/owner.entity';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, In, Repository } from 'typeorm';
+import { ApartmentEntity } from 'src/apartment/entities/apartment.entity';
 
 @Injectable()
 export class OwnerService {
   constructor(
     @InjectRepository(OwnerEntity)
     private readonly ownerRepository: Repository<OwnerEntity>,
+    @InjectRepository(ApartmentEntity)
+    private readonly apartmentRepository: Repository<ApartmentEntity>,
   ) {}
 
   create(createOwnerDto: CreateOwnerDto) {
@@ -17,8 +20,42 @@ export class OwnerService {
     return this.ownerRepository.save(newOwner);
   }
 
+  async assignApatmentToOwner(ownerId: number, apartmentId: number) {
+    const owner = await this.ownerRepository.findOne({ where: { id: ownerId } });
+    if (!owner) {
+      throw new Error('Owner not found');
+    }
+
+    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId } });
+    if (!apartment) {
+      throw new Error('Apartment not found');
+    }
+    apartment.owner = owner;
+
+    await this.apartmentRepository.save(apartment);
+
+    return apartment;
+  }
+
+  async removeApartmentFromOwner(ownerId: number, apartmentId: number) {
+    const owner = await this.ownerRepository.findOne({ where: { id: ownerId } });
+    if (!owner) {
+      throw new Error('Owner not found');
+    }
+
+    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId } });
+    if (!apartment) {
+      throw new Error('Apartment not found');
+    }
+    apartment.owner = null;
+
+    await this.apartmentRepository.save(apartment);
+
+    return apartment;
+  }
+
   findAll() {
-    return this.ownerRepository.find();
+    return this.ownerRepository.find({relations: ['apartments']});
   }
 
   async findOne(id: number) {

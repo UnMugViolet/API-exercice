@@ -20,6 +20,7 @@ import { CommonFacilityToBuildingModule } from './common-facility-to-building/co
 import { CommonFacilityToBuildingEntity } from './common-facility-to-building/entities/common-facility-to-building.entity';
 import { ApartmentTypeEntity } from './apartment-type/entities/apartment-type.entity';
 import { SeederService } from './seeder.service';
+import { TenantModule } from './tenant/tenant.module';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ dotenv.config();
     CommonFacilityModule,
     OptionModule,
     OwnerModule,
+    TenantModule,
     ApartmentTypeModule,
     CommonFacilityToBuildingModule,
   ],

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeepPartial } from 'typeorm';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
@@ -8,6 +8,10 @@ import { ApartmentEntity } from './entities/apartment.entity';
 import { ApartmentTypeService } from 'src/apartment-type/apartment-type.service';
 import { ApartmentTypeEntity } from 'src/apartment-type/entities/apartment-type.entity';
 import { OwnerEntity } from 'src/owner/entities/owner.entity';
+import { CreateApartmentWithTenantDto } from './dto/create-apartment-with-tenant.dto';
+import { TenantEntity } from 'src/tenant/entities/tenant.entity';
+import { OptionEntity } from 'src/option/entities/option.entity';
+import { CreateApartmentWitOptionDto } from './dto/create-apartment-with-option.dto';
 
 
 @Injectable()
@@ -18,11 +22,13 @@ export class ApartmentService {
     private readonly apartmentRepository: Repository<ApartmentEntity>,
     @InjectRepository(ApartmentTypeEntity)
     private readonly apartmentTypeRepository: Repository<ApartmentTypeEntity>,
-    @InjectRepository(OwnerEntity)
-    private readonly ownerRepository: Repository<OwnerEntity>,
+    @InjectRepository(TenantEntity)
+    private readonly tenantRepository: Repository<TenantEntity>,
+    @InjectRepository(OptionEntity)
+    private readonly optionRepository: Repository<OptionEntity>,
   ) { }
 
-  async create(createApartmentDto: CreateApartmentDto) {
+  async createApartmentWithType(createApartmentDto: CreateApartmentDto) {
     if (!createApartmentDto.apartmentType) {
       throw new BadRequestException('Apartment type is required');
     }
@@ -36,28 +42,63 @@ export class ApartmentService {
       ...createApartmentDto,
       apartmentType: type
     });
-    
+
     return this.apartmentRepository.save(newApartment);
   }
 
-  async createApartmentWithOwner(createApartmentWithOwnerDto: CreateApartmentWithOwnerDto) {
-    if (!createApartmentWithOwnerDto.ownerId) {
-      throw new BadRequestException('Owner is required');
-    }
-    const owner = await this.ownerRepository.findOne({ where: { id: createApartmentWithOwnerDto.ownerId } });
+  async assignTenant (apartmentId: number, createApartmentWithTenant: CreateApartmentWithTenantDto) {
 
-    if (!owner) {
-      throw new BadRequestException('Owner not found');
+    const { tenantId } = createApartmentWithTenant;
+    if (!createApartmentWithTenant.tenantId) {
+      throw new BadRequestException('Tenant ID is required');
+    }
+    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId }, relations: ['apartmentType', 'tenants'] });
+    if (!apartment) {
+      throw new NotFoundException('Apartment not found');
     }
 
-    const newApartment = this.apartmentRepository.create({
-      ...createApartmentWithOwnerDto,
-      owner : owner
-    });
+    if (apartment.tenants.length >= apartment.apartmentType.maxOccupancy) {
+      throw new BadRequestException('Apartment has reached maximum capacity');
+    }
+    
+    const tenant = await this.tenantRepository.findOne({ where: { id: tenantId } });
+    if (!tenant) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    tenant.apartment = apartment;
+
+    await this.tenantRepository.save(tenant);
+
+    return tenant;
+  }
+
+  async assignOption(createApartmentWitOptionDto: CreateApartmentWitOptionDto) {
+    const { apartmentId, optionIds } = createApartmentWitOptionDto;
+
+    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId } });
+    if (!apartment) {
+      throw new NotFoundException('Apartment not found');
+    }
+
+    const options = await this.optionRepository.findByIds(optionIds);
+    if (options.length !== optionIds.length) {
+      throw new NotFoundException('One or more options not found');
+    }
+
+    if (!apartment.options) {
+      apartment.options = [];
+    }
+
+    apartment.options = [...apartment.options, ...options];
+
+    await this.apartmentRepository.save(apartment);
+
+    return apartment;
   }
 
   findAll() {
-    return this.apartmentRepository.find({relations: ['apartmentType', 'owner']});
+    return this.apartmentRepository.find({ relations: ['apartmentType', 'options', 'tenants'] });
   }
 
   async findOne(id: number): Promise<ApartmentEntity> {

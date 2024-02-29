@@ -12,9 +12,5 @@ export class CreatePersonDto {
 
   @ApiProperty()
   @IsString()
-  address: string;
-
-  @ApiProperty()
-  @IsString()
   phoneNumber: string;
 }

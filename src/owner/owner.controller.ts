@@ -3,15 +3,38 @@ import { OwnerService } from './owner.service';
 import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { RemoveApartmentFromOwnerDto } from './dto/remove-apartment-to-owner.dto';
+import { AssignApartmentToOwnerDto } from './dto/assign-apartment-to-owner.dto';
 
 @ApiTags('Owner')
 @Controller('owner')
 export class OwnerController {
   constructor(private readonly ownerService: OwnerService) {}
 
-  @Post()
-  create(@Body() createOwnerDto: CreateOwnerDto) {
+  @Post('createOwner')
+  createOwner(@Body() createOwnerDto: CreateOwnerDto) {
+    if (!createOwnerDto) {
+      return 'Owner data is required';
+    }
     return this.ownerService.create(createOwnerDto);
+  }
+
+  @Post('assignApatmentToOwner')
+  async assignApatmentToOwner(@Body() assignApatmentToOwnerDto: AssignApartmentToOwnerDto) {
+    const { ownerId, apartmentId } = assignApatmentToOwnerDto;
+    if (!ownerId || !apartmentId) {
+      return 'Owner ID and Apartment ID are required';
+    }
+    return this.ownerService.assignApatmentToOwner(ownerId, apartmentId);
+  }
+
+  @Post('removeApartmentFromOwner')
+  async removeApartmentFromOwner(@Body() removeApartmentFromOwnerDto: RemoveApartmentFromOwnerDto) {
+    const { ownerId, apartmentId } = removeApartmentFromOwnerDto;
+    if (!ownerId || !apartmentId) {
+      return 'Owner ID and Apartment ID are required';
+    }
+    return this.ownerService.removeApartmentFromOwner(ownerId, apartmentId);
   }
 
   @Get()
