@@ -107,6 +107,11 @@ export class BuildingService {
     return buildingFacilities;
   }
 
+
+  async findOneByName(name: string) {
+    return this.buildingRepository.findOne({ where: { name } });
+  }
+  
   findAll() {
     return this.buildingRepository.find({relations: ['apartments', 'commonFacilityToBuilding.commonFacility']});
   }
