@@ -28,7 +28,7 @@ export class ApartmentController {
     return this.apartmentService.assignTenant(apartmentId, createApartmentWithTenantDto);
   }
 
-  @Get()
+  @Get('findAllApartments')
   async findAll() {
     const apartments = await this.apartmentService.findAll();
     if (!apartments || apartments.length === 0) {
@@ -37,7 +37,7 @@ export class ApartmentController {
     return apartments;
   }
 
-  @Get(':id')
+  @Get(':id/findOneApartment')
   async findOne(@Param('id') id: string) {
     const apartment = await this.apartmentService.findOne(+id);
     if (!apartment) {
@@ -46,7 +46,7 @@ export class ApartmentController {
     return apartment;
   }
 
-  @Patch(':id')
+  @Patch(':id/updateApartment')
   update(@Param('id') id: string, @Body() updateApartmentDto: UpdateApartmentDto) {
     const apartment = this.apartmentService.update(+id, updateApartmentDto);
     if (!apartment) {
@@ -55,7 +55,7 @@ export class ApartmentController {
     return apartment;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeApartment')
   async remove(@Param('id') id: string) {
     const apartment = await this.apartmentService.remove(+id);
     if (!apartment) {

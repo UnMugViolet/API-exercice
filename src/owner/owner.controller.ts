@@ -37,7 +37,7 @@ export class OwnerController {
     return this.ownerService.removeApartmentFromOwner(ownerId, apartmentId);
   }
 
-  @Get()
+  @Get('findAllOwners')
   async findAll() {
     const owners = await this.ownerService.findAll();
     if (!owners || owners.length === 0) {
@@ -46,7 +46,7 @@ export class OwnerController {
     return owners;
   }
 
-  @Get(':id')
+  @Get(':id/findOneOwner')
   async findOne(@Param('id') id: string) {
     const owner = await this.ownerService.findOne(+id);
     if (!owner) {
@@ -55,7 +55,7 @@ export class OwnerController {
     return owner;
   }
 
-  @Patch(':id')
+  @Patch(':id/updateOwner')
   async update(@Param('id') id: string, @Body() updateOwnerDto: UpdateOwnerDto) {
     const owner = await this.ownerService.update(+id, updateOwnerDto);
     if (!owner) {
@@ -64,7 +64,7 @@ export class OwnerController {
     return owner;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeOwner')
   async remove(@Param('id') id: string) {
     const owner = await this.ownerService.remove(+id);
     if (!owner) {

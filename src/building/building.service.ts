@@ -7,7 +7,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { AssignApartmentToBuildingDto } from './dto/assign-apartment-to-building.dto';
 import { ApartmentEntity } from 'src/apartment/entities/apartment.entity';
 import { AddressEntity } from 'src/address/entities/address.entity';
-import { AssignAddressToBuildingDto } from './dto/assign-adress-to-building.dto';
+import { AssignAddressToBuildingDto } from './dto/assign-address-to-building.dto';
 import { CommonFacilityEntity } from 'src/common-facility/entities/common-facility.entity';
 import { CommonFacilityToBuildingEntity } from 'src/common-facility-to-building/entities/common-facility-to-building.entity';
 import { AssignFacilityToBuildingDto } from './dto/assign-facility-to-building.dto';

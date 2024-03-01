@@ -9,12 +9,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class ApartmentTypeController {
   constructor(private readonly apartmentTypeService: ApartmentTypeService) {}
 
-  @Post()
+  @Post('createApartmentType')
   create(@Body() createApartmentTypeDto: CreateApartmentTypeDto) {
     return this.apartmentTypeService.create(createApartmentTypeDto);
   }
 
-  @Get()
+  @Get('findAllApartmentTypes')
   async findAll() {
     const apartmentTypes = await this.apartmentTypeService.findAll();
     if (!apartmentTypes || apartmentTypes.length === 0) {
@@ -23,7 +23,7 @@ export class ApartmentTypeController {
     return apartmentTypes;
   }
 
-  @Get(':id')
+  @Get(':id/findOneApartmentType')
   async findOne(@Param('id') id: string) {
     const apartmentType = await this.apartmentTypeService.findOne(+id);
     if (!apartmentType) {
@@ -32,7 +32,7 @@ export class ApartmentTypeController {
     return apartmentType;
   }
 
-  @Patch(':id')
+  @Patch(':id/updateApartmentType')
   async update(@Param('id') id: string, @Body() updateApartmentTypeDto: UpdateApartmentTypeDto) {
     const apartmentType = await this.apartmentTypeService.update(+id, updateApartmentTypeDto);
     if (!apartmentType) {
@@ -41,7 +41,7 @@ export class ApartmentTypeController {
     return apartmentType;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeApartmentType')
   async remove(@Param('id') id: string) {
     const apartmentType = await this.apartmentTypeService.remove(+id);
     if (!apartmentType) {

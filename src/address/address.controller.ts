@@ -9,12 +9,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
-  @Post()
+  @Post('createAddress')
   create(@Body() createAddressDto: CreateAddressDto) {
     return this.addressService.create(createAddressDto);
   }
 
-  @Get()
+  @Get('findAllAddresses')
   async findAll() {
     const addresses = await this.addressService.findAll();
     if (!addresses || addresses.length === 0) {
@@ -23,7 +23,7 @@ export class AddressController {
     return addresses;
   }
 
-  @Get(':id')
+  @Get(':id/findOneAddress')
   async findOne(@Param('id') id: string) {
     const address = await this.addressService.findOne(+id);
     if (!address) {
@@ -32,7 +32,7 @@ export class AddressController {
     return address;
   }
 
-  @Patch(':id')
+  @Patch(':id/updateAddress')
   update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
     const address = this.addressService.findOne(+id);
     if (!address) {
@@ -41,7 +41,7 @@ export class AddressController {
     return this.addressService.update(+id, updateAddressDto);
   }
 
-  @Delete(':id')
+  @Delete(':id/removeAddress')
   async remove(@Param('id') id: string) {
     const address = await this.addressService.findOne(+id);
     if (!address) {
