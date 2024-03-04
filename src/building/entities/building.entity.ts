@@ -21,6 +21,6 @@ export class BuildingEntity {
   @OneToMany(() => ApartmentEntity, apartment => apartment.building, { cascade: true, onDelete: 'CASCADE'})
   apartments: ApartmentEntity[];
 
-  @OneToMany(() => CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.commonFacility)
+  @OneToMany(() => CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.building)
   commonFacilityToBuilding: CommonFacilityToBuildingEntity[];
 }

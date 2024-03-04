@@ -13,6 +13,6 @@ export class CommonFacilityEntity {
   @Column()
   isSecure: boolean
 
-  @OneToMany(()=> CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.building)
-  commonFacilityToBuilding : CommonFacilityToBuildingEntity[];
+  @OneToMany(() => CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.commonFacility)
+  commonFacilityToBuilding: CommonFacilityToBuildingEntity[];
 }

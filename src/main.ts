@@ -11,7 +11,7 @@ async function bootstrap() {
   await seeder.seedAll();
 
   const config = new DocumentBuilder()
-    .setTitle('Exam API - Address handler with Swagger | Paul Jaguin')
+    .setTitle('Exam API - Real Estate manager with Swagger | Paul Jaguin')
     .setDescription('This API is used  to manage real estate creating the address, building, apartment, owner, tenant, common facility, and options linked to them.')
     .setVersion('1.0')
     .build();

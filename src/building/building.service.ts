@@ -83,41 +83,49 @@ export class BuildingService {
       throw new NotFoundException('Building not found');
     }
 
-    const facilities = await this.commonFacilityRepository.findOne({ where: { id: facilitiesId } });
-    if (!facilities) {
-      throw new NotFoundException('Facilities not found');
+    const buildingFacilitiesList = [];
+
+    for (const facilityId of facilitiesId) {
+      const facilities = await this.commonFacilityRepository.findOne({ where: { id: facilityId } });
+      if (!facilities) {
+        throw new NotFoundException(`Facility with id ${facilityId} not found`);
+      }
+
+      const buildingFacilities = new CommonFacilityToBuildingEntity();
+      buildingFacilities.building = building;
+      buildingFacilities.commonFacility = facilities;
+
+      buildingFacilities.commonFacility.name = facilities.name;
+
+      if (facilities.isSecure) {
+        buildingFacilities.lastInspection = new Date();
+      } else if (buildingFacilities.lastInspection === null) {
+        buildingFacilities.lastInspection = building.buildingCreationDate;
+      } else {
+        buildingFacilities.lastInspection = null; // Set a default value
+      }
+
+      await this.commonFacilityToBuildingRepository.save(buildingFacilities);
+
+      buildingFacilitiesList.push(buildingFacilities.commonFacility);
     }
 
-    const buildingFacilities = new CommonFacilityToBuildingEntity();
-    buildingFacilities.building = building;
-    buildingFacilities.commonFacility = facilities;
-
-    buildingFacilities.commonFacility.name = facilities.name;
-
-    if (facilities.isSecure) {
-      buildingFacilities.lastInspection = new Date();
-    } else if (buildingFacilities.lastInspection === null) {
-      buildingFacilities.lastInspection = building.buildingCreationDate;
-    } else {
-      buildingFacilities.lastInspection = null; // Set a default value
-    }
-
-    await this.commonFacilityToBuildingRepository.save(buildingFacilities);
-
-    return buildingFacilities;
+    return {
+      building: building,
+      facilities: buildingFacilitiesList
+    };
   }
-
 
   async findOneByName(name: string) {
     return this.buildingRepository.findOne({ where: { name } });
   }
   
   findAll() {
-    return this.buildingRepository.find({relations: ['apartments', 'commonFacilityToBuilding.commonFacility']});
+    return this.buildingRepository.find({relations: ['apartments','commonFacilityToBuilding.commonFacility']});
   }
 
   findOne(id: number) {
-    return this.buildingRepository.findOne({ where: { id } });
+    return this.buildingRepository.findOne({ where: { id }, relations: ['commonFacilityToBuilding.commonFacility'] });
   }
 
   async getBuildingStats(buildingId: number): Promise<any> {
