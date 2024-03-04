@@ -9,12 +9,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class CommonFacilityToBuildingController {
   constructor(private readonly commonFacilityToBuildingService: CommonFacilityToBuildingService) {}
 
-  @Post()
+  @Post('createCommonFacilityToBuilding')
   create(@Body() createCommonFacilityToBuildingDto: CreateCommonFacilityToBuildingDto) {
     return this.commonFacilityToBuildingService.create(createCommonFacilityToBuildingDto);
   }
 
-  @Get()
+  @Get('findAllCommonFacilityToBuildings')
   async findAll() {
     const commonFaciliesToBuilding = await this.commonFacilityToBuildingService.findAll();
     if (!commonFaciliesToBuilding || commonFaciliesToBuilding.length === 0) {
@@ -23,7 +23,7 @@ export class CommonFacilityToBuildingController {
     return commonFaciliesToBuilding;
   }
 
-  @Get(':id')
+  @Get(':id/findOneCommonFacilityToBuilding')
   async findOne(@Param('id') id: string) {
     const commonFacilityToBuilding = await this.commonFacilityToBuildingService.findOne(+id);
     if (!commonFacilityToBuilding) {
@@ -32,7 +32,7 @@ export class CommonFacilityToBuildingController {
     return commonFacilityToBuilding;
   }
 
-  @Put(':id')
+  @Put(':id/updateCommonFacilityToBuilding')
   async update(@Param('id') id: string, @Body() updateCommonFacilityToBuildingDto: UpdateCommonFacilityToBuildingDto) {
     const commonFacilityToBuilding = await this.commonFacilityToBuildingService.update(+id, updateCommonFacilityToBuildingDto);
     if (!commonFacilityToBuilding) {
@@ -41,7 +41,7 @@ export class CommonFacilityToBuildingController {
     return commonFacilityToBuilding;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeCommonFacilityToBuilding')
   async remove(@Param('id') id: string) {
     const commonFacilityToBuilding = await this.commonFacilityToBuildingService.remove(+id);
     if (!commonFacilityToBuilding) {

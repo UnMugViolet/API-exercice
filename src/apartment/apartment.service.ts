@@ -97,6 +97,10 @@ export class ApartmentService {
     return apartment;
   }
 
+  async findOneByDescription(description: string): Promise<ApartmentEntity> {
+    return await this.apartmentRepository.findOne({ where: { description } });
+  }
+
   findAll() {
     return this.apartmentRepository.find({ relations: ['apartmentType', 'options', 'tenants'] });
   }

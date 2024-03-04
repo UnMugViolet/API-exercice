@@ -9,12 +9,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class OptionController {
   constructor(private readonly optionService: OptionService) {}
 
-  @Post()
+  @Post('createOption')
   create(@Body() createOptionDto: CreateOptionDto) {
     return this.optionService.create(createOptionDto);
   }
 
-  @Get()
+  @Get('findAllOptions')
   async findAll() {
     const options = await this.optionService.findAll();
     if (!options || options.length === 0) {
@@ -23,7 +23,7 @@ export class OptionController {
     return options;
   }
 
-  @Get(':id')
+  @Get(':id/findOneOption')
   async findOne(@Param('id') id: string) {
     const option = await this.optionService.findOne(+id);
     if (!option) {
@@ -32,7 +32,7 @@ export class OptionController {
     return option;
   }
 
-  @Put(':id')
+  @Put(':id/updateOption')
   async update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
     const option = await this.optionService.update(+id, updateOptionDto);
     if (!option) {
@@ -41,7 +41,7 @@ export class OptionController {
     return option;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeOption')
   async remove(@Param('id') id: string) {
     const option = await this.optionService.remove(+id);
     if (!option) {

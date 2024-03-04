@@ -9,12 +9,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
-  @Post()
+  @Post('createTenant')
   create(@Body() createTenantDto: CreateTenantDto) {
     return this.tenantService.create(createTenantDto);
   }
 
-  @Get()
+  @Get('findAllTenants')
   async findAll() {
     const tenants = await this.tenantService.findAll();
     if (!tenants || tenants.length === 0) {
@@ -23,7 +23,7 @@ export class TenantController {
     return tenants;
   }
 
-  @Get(':id')
+  @Get(':id/findOneTenant')
   async findOne(@Param('id') id: string) {
     const tenant = await this.tenantService.findOne(+id);
     if (!tenant) {
@@ -32,7 +32,7 @@ export class TenantController {
     return tenant;
   }
 
-  @Put(':id')
+  @Put(':id/updateTenant')
   async update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
     const tenant = await this.tenantService.update(+id, updateTenantDto);
     if (!tenant) {
@@ -41,7 +41,7 @@ export class TenantController {
     return tenant;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeTenant')
   async remove(@Param('id') id: string) {
     const tenant = await this.tenantService.remove(+id);
     if (!tenant) {

@@ -4,7 +4,7 @@ import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AssignApartmentToBuildingDto } from './dto/assign-apartment-to-building.dto';
-import { AssignAddressToBuildingDto } from './dto/assign-adress-to-building.dto';
+import { AssignAddressToBuildingDto } from './dto/assign-address-to-building.dto';
 import { AssignFacilityToBuildingDto } from './dto/assign-facility-to-building.dto';
 
 @ApiTags('Building')
@@ -64,7 +64,7 @@ export class BuildingController {
     return building;
   }
 
-  @Delete(':id/deleteBuilding')
+  @Delete(':id/removeBuilding')
   async remove(@Param('id') id: string) {
     const building = await this.buildingService.remove(+id);
     if (!building) {

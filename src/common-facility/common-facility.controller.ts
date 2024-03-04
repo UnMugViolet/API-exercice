@@ -9,12 +9,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class CommonFacilityController {
   constructor(private readonly commonFacilityService: CommonFacilityService) {}
 
-  @Post()
+  @Post('createCommonFacility')
   create(@Body() createCommonFacilityDto: CreateCommonFacilityDto) {
     return this.commonFacilityService.create(createCommonFacilityDto);
   }
 
-  @Get()
+  @Get('findAllCommonFacilities')
   async findAll() {
     const commonFacility = await this.commonFacilityService.findAll();
     if (!commonFacility || commonFacility.length === 0) {
@@ -23,7 +23,7 @@ export class CommonFacilityController {
     return commonFacility;
   }
 
-  @Get(':id')
+  @Get(':id/findOneCommonFacility')
   async findOne(@Param('id') id: string) {
     const commonFacilities = await this.commonFacilityService.findOne(+id);
     if (!commonFacilities) {
@@ -32,7 +32,7 @@ export class CommonFacilityController {
     return commonFacilities;
   }
 
-  @Put(':id')
+  @Put(':id/updateCommonFacility')
   update(@Param('id') id: string, @Body() updateCommonFacilityDto: UpdateCommonFacilityDto) {
     const commonFacility = this.commonFacilityService.update(+id, updateCommonFacilityDto);
     if (!commonFacility) {
@@ -41,7 +41,7 @@ export class CommonFacilityController {
     return commonFacility;
   }
 
-  @Delete(':id')
+  @Delete(':id/removeCommonFacility')
   async remove(@Param('id') id: string) {
     const commonFacility = await this.commonFacilityService.remove(+id);
     if (!commonFacility) {

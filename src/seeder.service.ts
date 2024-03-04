@@ -11,6 +11,9 @@ import { OwnerService } from './owner/owner.service';
 import { CreateOwnerDto } from './owner/dto/create-owner.dto';
 import { TenantService } from './tenant/tenant.service';
 import { CreateTenantDto } from './tenant/dto/create-tenant.dto';
+import { ApartmentService } from './apartment/apartment.service';
+import { CreateApartmentDto } from './apartment/dto/create-apartment.dto';
+import { BuildingService } from './building/building.service';
 
 @Injectable()
 export class SeederService {
@@ -21,6 +24,8 @@ export class SeederService {
     private readonly optionService: OptionService,
     private readonly ownerService: OwnerService,
     private readonly tenantService: TenantService,
+    private readonly apartmentService: ApartmentService,
+    private readonly buildingService: BuildingService,
   ) {}
 
   async seedApartmentTypes() {
@@ -148,6 +153,44 @@ export class SeederService {
       }
     }
   }
+  
+  async seedApartments() {
+    const apartments = [
+      { description: 'Beautiful apartment with a view', doorNumber: '1A', floorArea: 1, rent: 750, apartmentType: 2 },
+      { description: 'Beautiful apartment perfect for couple or man lownly', doorNumber: '1B', floorArea: 2, rent: 1800, apartmentType: 3  },
+      { description: 'Beautiful apartment with a swimming pool', doorNumber: '1C', floorArea: 3, rent: 800, apartmentType: 1  },
+    ];
+
+    for(const apartment of apartments) {
+      // Check if the apartment already exists
+      const existingApartment = await this.apartmentService.findOneByDescription(apartment.description);
+      if (!existingApartment) {
+        const createApartmentDto = new CreateApartmentDto();
+        createApartmentDto.description = apartment.description;
+        createApartmentDto.doorNumber = apartment.doorNumber;
+        createApartmentDto.floorArea = apartment.floorArea;
+        createApartmentDto.rent = apartment.rent;
+        createApartmentDto.apartmentType = apartment.apartmentType;
+        await this.apartmentService.createApartmentWithType(createApartmentDto);
+      }
+    }
+  }
+
+  async seedBuildings() {
+    const buildings = [
+      { name: 'Empire State Building', buildingCreationDate: new Date() },
+      { name: 'The White House', buildingCreationDate: new Date() },
+      { name: 'The Liberty Bell', buildingCreationDate: new Date() },
+    ];
+
+    for(const building of buildings) {
+      // Check if the building already exists
+      const existingBuilding = await this.buildingService.findOneByName(building.name);
+      if (!existingBuilding) {
+        await this.buildingService.create(building);
+      }
+    }
+  }
 
   async seedAll() {
     await this.seedApartmentTypes();
@@ -155,5 +198,7 @@ export class SeederService {
     await this.seedAdresses();
     await this.seedOwners();
     await this.seedTenants();
+    await this.seedOptions();
+    await this.seedApartments();
   }
 }
