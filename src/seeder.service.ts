@@ -9,6 +9,8 @@ import { OptionService } from './option/option.service';
 import { CreateOptionDto } from './option/dto/create-option.dto';
 import { OwnerService } from './owner/owner.service';
 import { CreateOwnerDto } from './owner/dto/create-owner.dto';
+import { TenantService } from './tenant/tenant.service';
+import { CreateTenantDto } from './tenant/dto/create-tenant.dto';
 
 @Injectable()
 export class SeederService {
@@ -18,6 +20,7 @@ export class SeederService {
     private readonly addressService: AddressService,
     private readonly optionService: OptionService,
     private readonly ownerService: OwnerService,
+    private readonly tenantService: TenantService,
   ) {}
 
   async seedApartmentTypes() {
@@ -125,10 +128,32 @@ export class SeederService {
     }
   }
 
+  async seedTenants() {
+    const tenants = [ 
+      { id: 1, firstName: "John", lastName: "Tenant", phoneNumber: "0618784001", isMainTenant: true },
+      { id: 2, firstName: "Jane", lastName: "Tenant", phoneNumber: "0618784002", isMainTenant: false },
+      { id: 3, firstName: "Jack", lastName: "Tenant", phoneNumber: "0618784003", isMainTenant: false },
+    ];
+
+    for(const tenant of tenants) {
+      // Check if the tenant already exists
+      const existingTenant = await this.tenantService.findOne(tenant.id);
+      if (!existingTenant) {
+        const createTenantDto = new CreateTenantDto();
+        createTenantDto.firstName = tenant.firstName;
+        createTenantDto.lastName = tenant.lastName;
+        createTenantDto.phoneNumber = tenant.phoneNumber;
+        createTenantDto.isMainTenant = tenant.isMainTenant;
+        await this.tenantService.create(createTenantDto);
+      }
+    }
+  }
+
   async seedAll() {
     await this.seedApartmentTypes();
     await this.seedCommonFacilities();
     await this.seedAdresses();
     await this.seedOwners();
+    await this.seedTenants();
   }
 }

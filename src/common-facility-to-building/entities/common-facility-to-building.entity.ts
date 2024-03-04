@@ -10,7 +10,7 @@ export class CommonFacilityToBuildingEntity {
   @Column({ nullable: true })
   lastInspection: Date;
 
-  @ManyToOne(() => CommonFacilityEntity, commonFacility => commonFacility.commonFacilityToBuilding)
+  @ManyToOne(() => CommonFacilityEntity, commonFacility => commonFacility.commonFacilityToBuilding, { onDelete: 'SET NULL' })
   commonFacility: CommonFacilityEntity;
 
   @ManyToOne(() => BuildingEntity, building => building.commonFacilityToBuilding)

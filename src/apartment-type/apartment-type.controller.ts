@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
 import { ApartmentTypeService } from './apartment-type.service';
 import { CreateApartmentTypeDto } from './dto/create-apartment-type.dto';
 import { UpdateApartmentTypeDto } from './dto/update-apartment-type.dto';
@@ -32,7 +32,7 @@ export class ApartmentTypeController {
     return apartmentType;
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() updateApartmentTypeDto: UpdateApartmentTypeDto) {
     const apartmentType = await this.apartmentTypeService.update(+id, updateApartmentTypeDto);
     if (!apartmentType) {

@@ -115,6 +115,36 @@ export class BuildingService {
     return this.buildingRepository.findOne({ where: { id } });
   }
 
+  async getBuildingStats(buildingId: number): Promise<any> {
+    const building = await this.buildingRepository.findOne({ 
+      where: { id: buildingId },
+      relations: ['apartments', 'apartments.tenants']
+    });
+
+    if (!building) {
+      throw new NotFoundException('Building not found');
+    }
+
+    const totalApartments = building.apartments.length;
+    const occupiedApartments = building.apartments.filter(apartment => apartment.tenants.length > 0).length;
+    const totalTenants = building.apartments.reduce((acc, apartment) => acc + apartment.tenants.length, 0);
+    const singleOccupancyApartments = building.apartments.filter(apartment => apartment.tenants.length === 1).length;
+    const overOccupancyApartments = building.apartments.filter(apartment => apartment.tenants.length > 1).length;
+
+    const occupancyRate = totalApartments === 0 ? 0 : (occupiedApartments / totalApartments) * 100;
+
+    return {
+      building,
+      stats: {
+        totalApartments,
+        occupancyRate,
+        totalTenants,
+        singleOccupancyApartments,
+        overOccupancyApartments
+      }
+    };
+  }
+
   async update(id: number, updateBuildingDto: UpdateBuildingDto) {
     const building = await this.buildingRepository.findOne({ where: { id } });
     Object.assign(building, updateBuildingDto);

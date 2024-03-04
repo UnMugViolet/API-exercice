@@ -10,6 +10,6 @@ export class TenantEntity extends PersonEntity {
   @Column()
   isMainTenant: boolean;
 
-  @ManyToOne(() => ApartmentEntity, apartment => apartment.tenants)
+  @ManyToOne(() => ApartmentEntity, apartment => apartment.tenants, { onDelete: 'SET NULL' })
   apartment: ApartmentEntity;
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException} from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, NotFoundException, Put} from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
@@ -32,7 +32,7 @@ export class AddressController {
     return address;
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
     const address = this.addressService.findOne(+id);
     if (!address) {

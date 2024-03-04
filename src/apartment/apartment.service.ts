@@ -114,4 +114,19 @@ export class ApartmentService {
   remove(id: number) {
     return this.apartmentRepository.delete(id);
   }
+
+  async removeTenantFromApartment(apartmentId: number, tenantIds: number[]) {
+    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId }, relations: ['tenants'] });
+    if (!apartment) {
+      throw new NotFoundException('Apartment not found');
+    }
+
+    // Filter the tenants to be removed from the apartment
+    apartment.tenants = apartment.tenants.filter(tenant => !tenantIds.includes(tenant.id));
+
+    // Save the updated apartment
+    await this.apartmentRepository.save(apartment);
+
+    return { message: "Tenants successfully removed from the apartment" };
+  }
 }

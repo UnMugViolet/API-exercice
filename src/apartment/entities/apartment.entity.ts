@@ -22,10 +22,10 @@ export class ApartmentEntity {
   @Column()
   rent: number;
 
-  @ManyToOne(() => BuildingEntity, building => building.apartments)
+  @ManyToOne(() => BuildingEntity, building => building.apartments, { onDelete: 'CASCADE' })
   building: BuildingEntity;
 
-  @ManyToOne(() => OwnerEntity, owner => owner.apartments)
+  @ManyToOne(() => OwnerEntity, owner => owner.apartments, { onDelete: 'SET NULL' })
   owner: OwnerEntity;
 
   @ManyToMany(() => OptionEntity)
@@ -35,6 +35,6 @@ export class ApartmentEntity {
   @OneToMany(() => TenantEntity, tenant => tenant.apartment)
   tenants: TenantEntity[];
 
-  @ManyToOne(() => ApartmentTypeEntity, apartmentType => apartmentType.apartments)
+  @ManyToOne(() => ApartmentTypeEntity, apartmentType => apartmentType.apartments, { onDelete: 'SET NULL' })
   apartmentType: ApartmentTypeEntity;
 }

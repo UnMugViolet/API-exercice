@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
 import { BuildingService } from './building.service';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
@@ -12,7 +12,7 @@ import { AssignFacilityToBuildingDto } from './dto/assign-facility-to-building.d
 export class BuildingController {
   constructor(private readonly buildingService: BuildingService) {}
 
-  @Post()
+  @Post('createBuilding')
   async create(@Body() createBuildingDto: CreateBuildingDto) {
     return this.buildingService.create(createBuildingDto);
   }
@@ -32,7 +32,7 @@ export class BuildingController {
     return this.buildingService.assignFacilities(buildingId, assignFacilitiesDto);
   }
 
-  @Get()
+  @Get('findAllBuildings')
   async findAll() {
     const buildings = await this.buildingService.findAll();
     if (!buildings || buildings.length === 0) {
@@ -41,7 +41,7 @@ export class BuildingController {
     return buildings;
   }
 
-  @Get(':id')
+  @Get(':id/findOneBuilding')
   async findOne(@Param('id') id: string) {
     const building = await this.buildingService.findOne(+id);
     if (!building) {
@@ -50,7 +50,12 @@ export class BuildingController {
     return building;
   }
 
-  @Patch(':id')
+  @Get(':buildingId/getBuildingStats')
+  async getBuildingById(@Param('buildingId') buildingId: number): Promise<any> {
+    return this.buildingService.getBuildingStats(buildingId);
+  }
+
+  @Put(':id/updateBuilding')
   async update(@Param('id') id: string, @Body() updateBuildingDto: UpdateBuildingDto) {
     const building = await this.buildingService.update(+id, updateBuildingDto);
     if (!building) {
@@ -59,7 +64,7 @@ export class BuildingController {
     return building;
   }
 
-  @Delete(':id')
+  @Delete(':id/deleteBuilding')
   async remove(@Param('id') id: string) {
     const building = await this.buildingService.remove(+id);
     if (!building) {

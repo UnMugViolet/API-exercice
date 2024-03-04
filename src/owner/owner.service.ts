@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,31 +23,14 @@ export class OwnerService {
   async assignApatmentToOwner(ownerId: number, apartmentId: number) {
     const owner = await this.ownerRepository.findOne({ where: { id: ownerId } });
     if (!owner) {
-      throw new Error('Owner not found');
+      throw new NotFoundException('Owner not found');
     }
 
     const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId } });
     if (!apartment) {
-      throw new Error('Apartment not found');
+      throw new NotFoundException('Apartment not found');
     }
     apartment.owner = owner;
-
-    await this.apartmentRepository.save(apartment);
-
-    return apartment;
-  }
-
-  async removeApartmentFromOwner(ownerId: number, apartmentId: number) {
-    const owner = await this.ownerRepository.findOne({ where: { id: ownerId } });
-    if (!owner) {
-      throw new Error('Owner not found');
-    }
-
-    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId } });
-    if (!apartment) {
-      throw new Error('Apartment not found');
-    }
-    apartment.owner = null;
 
     await this.apartmentRepository.save(apartment);
 
@@ -70,6 +53,23 @@ export class OwnerService {
     const owner = await this.ownerRepository.findOne({ where: { id } });
     Object.assign(owner, updateOwnerDto);
     return this.ownerRepository.save(owner);
+  }
+
+  async removeApartmentFromOwner(ownerId: number, apartmentId: number) {
+    const owner = await this.ownerRepository.findOne({ where: { id: ownerId } });
+    if (!owner) {
+      throw new NotFoundException('Owner id is not found in the database');
+    }
+
+    const apartment = await this.apartmentRepository.findOne({ where: { id: apartmentId } });
+    if (!apartment) {
+      throw new NotFoundException('Apartment id is not found in the database');
+    }
+    apartment.owner = null;
+
+    await this.apartmentRepository.save(apartment);
+
+    return apartment;
   }
 
   remove(id: number) {

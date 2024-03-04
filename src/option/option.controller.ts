@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
 import { OptionService } from './option.service';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
@@ -32,7 +32,7 @@ export class OptionController {
     return option;
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
     const option = await this.optionService.update(+id, updateOptionDto);
     if (!option) {

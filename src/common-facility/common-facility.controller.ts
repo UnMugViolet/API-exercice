@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException} from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, NotFoundException, Put} from '@nestjs/common';
 import { CommonFacilityService } from './common-facility.service';
 import { CreateCommonFacilityDto } from './dto/create-common-facility.dto';
 import { UpdateCommonFacilityDto } from './dto/update-common-facility.dto';
@@ -32,7 +32,7 @@ export class CommonFacilityController {
     return commonFacilities;
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateCommonFacilityDto: UpdateCommonFacilityDto) {
     const commonFacility = this.commonFacilityService.update(+id, updateCommonFacilityDto);
     if (!commonFacility) {

@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, NotFoundException, Put } from '@nestjs/common';
 import { ApartmentService } from './apartment.service';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
 import { UpdateApartmentDto } from './dto/update-apartment.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateApartmentWithTenantDto } from './dto/create-apartment-with-tenant.dto';
 import { CreateApartmentWitOptionDto } from './dto/create-apartment-with-option.dto';
+import { DeleteTenantFromApartmentDto } from './dto/delete-tenant-from-apartment.dto';
 
 @ApiTags('Apartment')
 @Controller('apartment')
@@ -23,12 +24,12 @@ export class ApartmentController {
     return this.apartmentService.createApartmentWithType(createApartmentDto);
   }
 
-  @Post(':apartmentId/createTenantForApartment')
+  @Post(':apartmentId/assignTenantToApartment')
   assignTenant(@Body() createApartmentWithTenantDto: CreateApartmentWithTenantDto, @Param('apartmentId') apartmentId: number) {
     return this.apartmentService.assignTenant(apartmentId, createApartmentWithTenantDto);
   }
 
-  @Get()
+  @Get('findAllApartments')
   async findAll() {
     const apartments = await this.apartmentService.findAll();
     if (!apartments || apartments.length === 0) {
@@ -37,7 +38,7 @@ export class ApartmentController {
     return apartments;
   }
 
-  @Get(':id')
+  @Get(':id/findOneApartment')
   async findOne(@Param('id') id: string) {
     const apartment = await this.apartmentService.findOne(+id);
     if (!apartment) {
@@ -46,7 +47,7 @@ export class ApartmentController {
     return apartment;
   }
 
-  @Patch(':id')
+  @Put(':id/updateApartment')
   update(@Param('id') id: string, @Body() updateApartmentDto: UpdateApartmentDto) {
     const apartment = this.apartmentService.update(+id, updateApartmentDto);
     if (!apartment) {
@@ -55,12 +56,18 @@ export class ApartmentController {
     return apartment;
   }
 
-  @Delete(':id')
+  @Delete(':id/deleteApartment')
   async remove(@Param('id') id: string) {
     const apartment = await this.apartmentService.remove(+id);
     if (!apartment) {
       throw new NotFoundException(`Apartment with ID ${id} not found`);
     }
     return apartment;
+  }
+
+  @Delete(':apartmentId/removeTenantFromApartment')
+  async removeTenantFromApartment(@Body() deleteTenantDto: DeleteTenantFromApartmentDto, @Param('apartmentId') apartmentId: number) {
+    const { tenantIds } = deleteTenantDto;
+    return this.apartmentService.removeTenantFromApartment(apartmentId, tenantIds);
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
 import { OwnerService } from './owner.service';
 import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
@@ -28,15 +28,7 @@ export class OwnerController {
     return this.ownerService.assignApatmentToOwner(ownerId, apartmentId);
   }
 
-  @Post('removeApartmentFromOwner')
-  async removeApartmentFromOwner(@Body() removeApartmentFromOwnerDto: RemoveApartmentFromOwnerDto) {
-    const { ownerId, apartmentId } = removeApartmentFromOwnerDto;
-    if (!ownerId || !apartmentId) {
-      return 'Owner ID and Apartment ID are required';
-    }
-    return this.ownerService.removeApartmentFromOwner(ownerId, apartmentId);
-  }
-
+  
   @Get()
   async findAll() {
     const owners = await this.ownerService.findAll();
@@ -45,7 +37,7 @@ export class OwnerController {
     }
     return owners;
   }
-
+  
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const owner = await this.ownerService.findOne(+id);
@@ -54,14 +46,23 @@ export class OwnerController {
     }
     return owner;
   }
-
-  @Patch(':id')
+  
+  @Put(':id')
   async update(@Param('id') id: string, @Body() updateOwnerDto: UpdateOwnerDto) {
     const owner = await this.ownerService.update(+id, updateOwnerDto);
     if (!owner) {
       return `Owner with ID ${id} not found`;
     }
     return owner;
+  }
+  
+  @Delete(':ownerId/removeApartmentFromOwner')
+  async removeApartmentFromOwner(@Body() removeApartmentFromOwnerDto: RemoveApartmentFromOwnerDto, @Param('ownerId') ownerId: number) {
+    const { apartmentId } = removeApartmentFromOwnerDto;
+    if (!ownerId || !apartmentId) {
+      return 'Owner ID and Apartment ID are required';
+    }
+    return this.ownerService.removeApartmentFromOwner(ownerId, apartmentId);
   }
 
   @Delete(':id')

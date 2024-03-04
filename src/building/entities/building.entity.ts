@@ -18,7 +18,7 @@ export class BuildingEntity {
   @JoinColumn()
   address: AddressEntity;
 
-  @OneToMany(() => ApartmentEntity, apartment => apartment.building)
+  @OneToMany(() => ApartmentEntity, apartment => apartment.building, { cascade: true })
   apartments: ApartmentEntity[];
 
   @OneToMany(() => CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.commonFacility)

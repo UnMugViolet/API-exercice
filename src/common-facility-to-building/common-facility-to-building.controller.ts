@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete} from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put} from '@nestjs/common';
 import { CommonFacilityToBuildingService } from './common-facility-to-building.service';
 import { CreateCommonFacilityToBuildingDto } from './dto/create-common-facility-to-building.dto';
 import { UpdateCommonFacilityToBuildingDto } from './dto/update-common-facility-to-building.dto';
@@ -32,7 +32,7 @@ export class CommonFacilityToBuildingController {
     return commonFacilityToBuilding;
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() updateCommonFacilityToBuildingDto: UpdateCommonFacilityToBuildingDto) {
     const commonFacilityToBuilding = await this.commonFacilityToBuildingService.update(+id, updateCommonFacilityToBuildingDto);
     if (!commonFacilityToBuilding) {
