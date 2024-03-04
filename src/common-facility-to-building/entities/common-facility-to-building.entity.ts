@@ -13,6 +13,6 @@ export class CommonFacilityToBuildingEntity {
   @ManyToOne(() => CommonFacilityEntity, commonFacility => commonFacility.commonFacilityToBuilding, { onDelete: 'SET NULL' })
   commonFacility: CommonFacilityEntity;
 
-  @ManyToOne(() => BuildingEntity, building => building.commonFacilityToBuilding)
+  @ManyToOne(() => BuildingEntity, building => building.commonFacilityToBuilding , { onDelete: 'SET NULL'})
   building: BuildingEntity;
 }

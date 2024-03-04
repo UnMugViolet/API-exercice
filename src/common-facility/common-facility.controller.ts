@@ -14,6 +14,7 @@ export class CommonFacilityController {
   @ApiBody ({ type: CreateCommonFacilityDto })
   @ApiResponse({ status: 201, description: 'The common facility has been successfully created.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Common facility not found.'})
   async create(@Body() createCommonFacilityDto: CreateCommonFacilityDto) {
     await this.commonFacilityService.create(createCommonFacilityDto);
     return 'Common facility has been successfully created !';
@@ -21,9 +22,9 @@ export class CommonFacilityController {
 
   @Get('findAllCommonFacilities')
   @ApiOperation({ summary: 'Find all common facilities' })
-  @ApiBody({ type: CreateCommonFacilityDto })
-  @ApiResponse({ status: 201, description: 'List of all common facilities.'})
+  @ApiResponse({ status: 200, description: 'List of all common facilities.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'No common facility found.'})
   async findAll() {
     const commonFacility = await this.commonFacilityService.findAll();
     if (!commonFacility || commonFacility.length === 0) {
@@ -34,9 +35,9 @@ export class CommonFacilityController {
 
   @Get(':id/findOneCommonFacility')
   @ApiOperation({ summary: 'Find a common facility by ID' })
-  @ApiBody({ type: CreateCommonFacilityDto })
-  @ApiResponse({ status: 201, description: 'Common facility found.'})
+  @ApiResponse({ status: 200, description: 'Common facility found.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Common facility not found.'})
   async findOne(@Param('id') id: string) {
     const commonFacilities = await this.commonFacilityService.findOne(+id);
     if (!commonFacilities) {
@@ -48,8 +49,9 @@ export class CommonFacilityController {
   @Put(':id/updateCommonFacility')
   @ApiOperation({ summary: 'Update a common facility' })
   @ApiBody({ type: UpdateCommonFacilityDto })
-  @ApiResponse({ status: 201, description: 'Common facility updated.'})
+  @ApiResponse({ status: 200, description: 'Common facility updated.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Common facility not found.'})
   update(@Param('id') id: string, @Body() updateCommonFacilityDto: UpdateCommonFacilityDto) {
     const commonFacility = this.commonFacilityService.update(+id, updateCommonFacilityDto);
     if (!commonFacility) {
@@ -60,13 +62,14 @@ export class CommonFacilityController {
 
   @Delete(':id/removeCommonFacility')
   @ApiOperation({ summary: 'Remove a common facility' })
-  @ApiResponse({ status: 201, description: 'Common facility removed.'})
+  @ApiResponse({ status: 200, description: 'Common facility removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Common facility not found.'})
   async remove(@Param('id') id: string) {
     const commonFacility = await this.commonFacilityService.remove(+id);
-    if (!commonFacility) {
+    if (commonFacility.affected === 0) {
       throw new NotFoundException(`Common facility with ID ${id} not found`);
     }
-    return commonFacility;
+    return `Common facility with ID ${id} has been successfully removed !`;
   }
 }

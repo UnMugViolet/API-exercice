@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put, NotFoundException } from '@nestjs/common';
 import { OwnerService } from './owner.service';
 import { CreateOwnerDto } from './dto/create-owner.dto';
 import { UpdateOwnerDto } from './dto/update-owner.dto';
@@ -41,7 +41,6 @@ export class OwnerController {
 
   @Get('findAllOwners')
   @ApiOperation({ summary: 'Find all owners' })
-  @ApiBody({ type: CreateOwnerDto })
   @ApiResponse({ status: 201, description: 'List of all owners.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findAll() {
@@ -54,7 +53,6 @@ export class OwnerController {
 
   @Get(':id/findOneOwner')
   @ApiOperation({ summary: 'Find an owner by ID' })
-  @ApiBody({ type: CreateOwnerDto })
   @ApiResponse({ status: 201, description: 'Owner found.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findOne(@Param('id') id: string) {
@@ -62,6 +60,7 @@ export class OwnerController {
     if (!owner) {
       return `Owner with ID ${id} not found`;
     }
+    return owner;
   }
 
   @Put(':id/updateOwner')
@@ -79,7 +78,6 @@ export class OwnerController {
   
   @Delete(':ownerId/removeApartmentFromOwner')
   @ApiOperation({ summary: 'Remove apartment from owner' })
-  @ApiBody({ type: RemoveApartmentFromOwnerDto })
   @ApiResponse({ status: 201, description: 'Apartment removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async removeApartmentFromOwner(@Body() removeApartmentFromOwnerDto: RemoveApartmentFromOwnerDto, @Param('ownerId') ownerId: number) {
@@ -93,14 +91,13 @@ export class OwnerController {
 
   @Delete(':id/removeOwner')
   @ApiOperation({ summary: 'Remove an owner' })
-  @ApiBody({ type: CreateOwnerDto })
   @ApiResponse({ status: 201, description: 'Owner removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async remove(@Param('id') id: string) {
     const owner = await this.ownerService.remove(+id);
-    if (!owner) {
-      return 'Owner with ID ${id} not found'; 
+    if (owner.affected === 0 ) {
+      throw new NotFoundException(`Owner with ID ${id} not found`); 
     }
-    return owner;
+    return `Owner with ID ${id} successfully removed !`;
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put, NotFoundException } from '@nestjs/common';
 import { TenantService } from './tenant.service';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
@@ -15,15 +15,14 @@ export class TenantController {
   @ApiResponse({ status: 201, description: 'The tenant has been successfully created.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async create(@Body() createTenantDto: CreateTenantDto) {
-    await this.tenantService.create(createTenantDto);
-    return 'Tenant has been successfully created !';
+    return this.tenantService.create(createTenantDto);
   }
 
   @Get('findAllTenants')
   @ApiOperation({ summary: 'Find all tenants' })
-  @ApiBody({ type: CreateTenantDto })
-  @ApiResponse({ status: 201, description: 'List of all tenants.'})
+  @ApiResponse({ status: 200, description: 'List of all tenants.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'No tenant found.'})
   async findAll() {
     const tenants = await this.tenantService.findAll();
     if (!tenants || tenants.length === 0) {
@@ -35,8 +34,9 @@ export class TenantController {
   @Get(':id/findOneTenant')
   @ApiOperation({ summary: 'Find a tenant by ID' })
   @ApiBody({ type: CreateTenantDto })
-  @ApiResponse({ status: 201, description: 'Tenant found.'})
+  @ApiResponse({ status: 200, description: 'Tenant found.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Tenant not found.'})
   async findOne(@Param('id') id: string) {
     const tenant = await this.tenantService.findOne(+id);
     if (!tenant) {
@@ -48,26 +48,27 @@ export class TenantController {
   @Put(':id/updateTenant')
   @ApiOperation({ summary: 'Update a tenant' })
   @ApiBody({ type: UpdateTenantDto })
-  @ApiResponse({ status: 201, description: 'Tenant updated.'})
+  @ApiResponse({ status: 200, description: 'Tenant updated.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Tenant not found.'})
   async update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
-    const tenant = await this.tenantService.update(+id, updateTenantDto);
+    const tenant = await this.tenantService.findOne(+id);
     if (!tenant) {
-      return `Tenant with ID ${id} not found`;
+      throw new NotFoundException(`Tenant with ID ${id} not found`);
     }
-    return tenant;
+    return this.tenantService.update(+id, updateTenantDto);
   }
 
   @Delete(':id/removeTenant')
   @ApiOperation({ summary: 'Remove a tenant' })
-  @ApiBody({ type: CreateTenantDto })
-  @ApiResponse({ status: 201, description: 'Tenant removed.'})
+  @ApiResponse({ status: 200, description: 'Tenant removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Tenant not found.'})
   async remove(@Param('id') id: string) {
     const tenant = await this.tenantService.remove(+id);
-    if (!tenant) {
-      return `Tenant with ID ${id} not found`;
+    if (tenant.affected === 0) {
+      throw new NotFoundException(`Tenant with ID ${id} not found`);
     }
-    return tenant;
+    return `Tenant with ID ${id} has been successfully removed !`;
   }
 }

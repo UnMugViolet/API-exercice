@@ -16,7 +16,6 @@ export class ApartmentController {
 
   @Post('assignOptionToApartment')
   @ApiOperation({ summary: 'Assign option to apartment' })
-  @ApiBody({ type: CreateApartmentWitOptionDto })
   @ApiResponse({ status: 201, description: 'The option has been successfully assigned to apartment.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async assignOptionToApartment(@Body() createApartmentWitOptionDto: CreateApartmentWitOptionDto) {
@@ -26,7 +25,6 @@ export class ApartmentController {
 
   @Post('createApartmentWithType')
   @ApiOperation({ summary: 'Create apartment with type' })
-  @ApiBody({ type: CreateApartmentDto })
   @ApiResponse({ status: 201, description: 'The apartment has been successfully created.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async createApartmentWithType(@Body() createApartmentDto: CreateApartmentDto) {
@@ -36,7 +34,6 @@ export class ApartmentController {
 
   @Post(':apartmentId/assignTenantToApartment')
   @ApiOperation({ summary: 'Assign tenant to apartment' })
-  @ApiBody({ type: CreateApartmentWithTenantDto })
   @ApiResponse({ status: 201, description: 'The tenant has been successfully assigned to apartment.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async assignTenant(@Body() createApartmentWithTenantDto: CreateApartmentWithTenantDto, @Param('apartmentId') apartmentId: number) {
@@ -46,8 +43,7 @@ export class ApartmentController {
 
   @Get('findAllApartments')
   @ApiOperation({ summary: 'Find all apartments' })
-  @ApiBody({ type: CreateApartmentDto })
-  @ApiResponse({ status: 201, description: 'List of all apartments.'})
+  @ApiResponse({ status: 200, description: 'List of all apartments.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findAll() {
     const apartments = await this.apartmentService.findAll();
@@ -59,8 +55,7 @@ export class ApartmentController {
 
   @Get(':id/findOneApartment')
   @ApiOperation({ summary: 'Find an apartment by ID' })
-  @ApiBody({ type: CreateApartmentDto })
-  @ApiResponse({ status: 201, description: 'Apartment found.'})
+  @ApiResponse({ status: 200, description: 'Apartment found.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findOne(@Param('id') id: string) {
     const apartment = await this.apartmentService.findOne(+id);
@@ -72,8 +67,7 @@ export class ApartmentController {
 
   @Put(':id/updateApartment')
   @ApiOperation({ summary: 'Update an apartment' })
-  @ApiBody({ type: UpdateApartmentDto })
-  @ApiResponse({ status: 201, description: 'Apartment updated.'})
+  @ApiResponse({ status: 200, description: 'Apartment updated.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   update(@Param('id') id: string, @Body() updateApartmentDto: UpdateApartmentDto) {
     const apartment = this.apartmentService.update(+id, updateApartmentDto);
@@ -85,21 +79,20 @@ export class ApartmentController {
 
   @Delete(':id/deleteApartment')
   @ApiOperation({ summary: 'Remove an apartment' })
-  @ApiBody({ type: CreateApartmentDto })
-  @ApiResponse({ status: 201, description: 'Apartment removed.'})
+  @ApiResponse({ status: 200, description: 'Apartment removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async remove(@Param('id') id: string) {
     const apartment = await this.apartmentService.remove(+id);
-    if (!apartment) {
+    if (apartment.affected === 0 ) {
       throw new NotFoundException(`Apartment with ID ${id} not found`);
     }
-    return apartment;
+    return `Apartment with ID ${id} has been successfully removed !`;
   }
 
   @Delete(':apartmentId/removeTenantFromApartment')
   @ApiOperation({ summary: 'Remove tenant from apartment' })
-  @ApiBody({ type: DeleteTenantFromApartmentDto })
-  @ApiResponse({ status: 201, description: 'Tenant removed.'})
+  @ApiResponse({ status: 200, description: 'Tenant removed.'})
+  @ApiResponse({ status: 404, description: 'Tenant not found for apartment.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async removeTenantFromApartment(@Body() deleteTenantDto: DeleteTenantFromApartmentDto, @Param('apartmentId') apartmentId: number) {
     const { tenantIds } = deleteTenantDto;

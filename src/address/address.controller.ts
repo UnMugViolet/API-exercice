@@ -15,14 +15,12 @@ export class AddressController {
   @ApiResponse({ status: 201, description: 'The address has been successfully created.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async create(@Body() createAddressDto: CreateAddressDto) {
-    await this.addressService.create(createAddressDto);
-    return 'Address has been successfully created !';
+    return this.addressService.create(createAddressDto);
   }
 
   @Get('findAllAddresses')
   @ApiOperation({ summary: 'Find all addresses' })
-  @ApiBody({ type: CreateAddressDto })
-  @ApiResponse({ status: 201, description: 'List of all addresses.'})
+  @ApiResponse({ status: 200, description: 'List of all addresses.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
     async findAll() {
     const addresses = await this.addressService.findAll();
@@ -34,8 +32,7 @@ export class AddressController {
 
   @Get(':id/findOneAddress')
   @ApiOperation({ summary: 'Find an address by ID' })
-  @ApiBody({ type: CreateAddressDto })
-  @ApiResponse({ status: 201, description: 'Address found.'})
+  @ApiResponse({ status: 200, description: 'Address found.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findOne(@Param('id') id: string) {
     const address = await this.addressService.findOne(+id);
@@ -48,7 +45,7 @@ export class AddressController {
   @Put(':id/updateAddress')
   @ApiOperation({ summary: 'Update an address' })
   @ApiBody({ type: UpdateAddressDto })
-  @ApiResponse({ status: 201, description: 'Address updated.'})
+  @ApiResponse({ status: 200, description: 'Address updated.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
     const address = this.addressService.findOne(+id);
@@ -60,14 +57,14 @@ export class AddressController {
 
   @Delete(':id/removeAddress')
   @ApiOperation({ summary: 'Remove an address' })
-  @ApiBody({ type: CreateAddressDto })
-  @ApiResponse({ status: 201, description: 'Address removed.'})
+  @ApiResponse({ status: 200, description: 'Address removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Address not found.'})
   async remove(@Param('id') id: string) {
-    const address = await this.addressService.findOne(+id);
-    if (!address) {
+    const address = await this.addressService.remove(+id);
+    if (address.affected === 0 ) {
       throw new NotFoundException(`Address with ID ${id} not found`);
     }
-    return this.addressService.remove(+id);
+    return `Address with ID ${id} has been successfully removed !`;
   }
 }

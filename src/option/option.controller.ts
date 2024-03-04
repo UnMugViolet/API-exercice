@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body,  Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body,  Param, Delete, Put, NotFoundException } from '@nestjs/common';
 import { OptionService } from './option.service';
 import { CreateOptionDto } from './dto/create-option.dto';
 import { UpdateOptionDto } from './dto/update-option.dto';
@@ -11,8 +11,7 @@ export class OptionController {
 
   @Post('createOption')
   @ApiOperation({ summary: 'Create a new option' })
-  @ApiBody({ type: CreateOptionDto })
-  @ApiResponse({ status: 201, description: 'The option has been successfully created.'})
+  @ApiResponse({ status: 200, description: 'The option has been successfully created.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
   async create(@Body() createOptionDto: CreateOptionDto) {
     await this.optionService.create(createOptionDto);
@@ -21,9 +20,9 @@ export class OptionController {
 
   @Get('findAllOptions')
   @ApiOperation({ summary: 'Find all options' })
-  @ApiBody({ type: CreateOptionDto })
-  @ApiResponse({ status: 201, description: 'List of all options.'})
+  @ApiResponse({ status: 200, description: 'List of all options.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'No option found.'})
   async findAll() {
     const options = await this.optionService.findAll();
     if (!options || options.length === 0) {
@@ -34,9 +33,9 @@ export class OptionController {
 
   @Get(':id/findOneOption')
   @ApiOperation({ summary: 'Find an option by ID' })
-  @ApiBody({ type: CreateOptionDto })
-  @ApiResponse({ status: 201, description: 'Option found.'})
+  @ApiResponse({ status: 200, description: 'Option found.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Option not found.'})
   async findOne(@Param('id') id: string) {
     const option = await this.optionService.findOne(+id);
     if (!option) {
@@ -48,26 +47,28 @@ export class OptionController {
   @Put(':id/updateOption')
   @ApiOperation({ summary: 'Update an option' })
   @ApiBody({ type: UpdateOptionDto })
-  @ApiResponse({ status: 201, description: 'Option updated.'})
+  @ApiResponse({ status: 200, description: 'Option updated.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Option not found.'})
   async update(@Param('id') id: string, @Body() updateOptionDto: UpdateOptionDto) {
-    const option = await this.optionService.update(+id, updateOptionDto);
+    const option = await this.optionService.findOne(+id);
     if (!option) {
-      return `Option with ID ${id} not found`;
+      throw new NotFoundException(`Option with ID ${id} not found`);
     }
-    return option;
+    const updatedOption = await this.optionService.update(+id, updateOptionDto);
+    return updatedOption;
   }
 
   @Delete(':id/removeOption')
   @ApiOperation({ summary: 'Remove an option' })
-  @ApiBody({ type: CreateOptionDto })
-  @ApiResponse({ status: 201, description: 'Option removed.'})
+  @ApiResponse({ status: 200, description: 'Option removed.'})
   @ApiResponse({ status: 400, description: 'Invalid input.'})
+  @ApiResponse({ status: 404, description: 'Option not found.'})
   async remove(@Param('id') id: string) {
     const option = await this.optionService.remove(+id);
-    if (!option) {
-      return `Option with ID ${id} not found`;
+    if (option.affected === 0) {
+      throw new NotFoundException(`Option with ID ${id} not found`);
     }
-    return option;
+    return `Option with ID ${id} has been successfully removed !`;
   }
 }

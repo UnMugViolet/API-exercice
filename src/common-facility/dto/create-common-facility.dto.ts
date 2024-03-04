@@ -2,7 +2,7 @@ import { ApiProperty, ApiTags } from "@nestjs/swagger";
 import { IsString, IsDate, IsOptional } from "class-validator";
 
 export class CreateCommonFacilityDto {
-  @ApiProperty({ example: 'Common Facility name'})
+  @ApiProperty({ example: 'name'})
   @IsString()
   name: string;
 

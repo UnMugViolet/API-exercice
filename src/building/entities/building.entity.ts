@@ -14,11 +14,11 @@ export class BuildingEntity {
   @Column()
   buildingCreationDate: Date;
 
-  @OneToOne(() => AddressEntity, { eager: true })
+  @OneToOne(() => AddressEntity, { eager: true , onDelete: 'SET NULL'})
   @JoinColumn()
   address: AddressEntity;
 
-  @OneToMany(() => ApartmentEntity, apartment => apartment.building, { cascade: true })
+  @OneToMany(() => ApartmentEntity, apartment => apartment.building, { cascade: true, onDelete: 'CASCADE'})
   apartments: ApartmentEntity[];
 
   @OneToMany(() => CommonFacilityToBuildingEntity, commonFacilityToBuilding => commonFacilityToBuilding.commonFacility)
