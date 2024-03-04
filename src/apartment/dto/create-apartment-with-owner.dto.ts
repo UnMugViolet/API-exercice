@@ -2,22 +2,22 @@ import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateApartmentWithOwnerDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Apartment name'})
   @IsString()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '3B'})
   @IsString()
   doorNumber: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1})
   @IsNumber()
   floorArea: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 500})
   @IsNumber()
   rent: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1})
   ownerId: number;
 }

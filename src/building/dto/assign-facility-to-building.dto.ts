@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AssignFacilityToBuildingDto {
-  @ApiProperty()
+  @ApiProperty({ example: 1})
   facilitiesId: number;
 }

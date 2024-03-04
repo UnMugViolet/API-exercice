@@ -2,11 +2,11 @@ import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOptionDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Option name'})
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Option description'})
   @IsString()
   description: string;
 }

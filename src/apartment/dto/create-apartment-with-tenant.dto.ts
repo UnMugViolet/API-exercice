@@ -3,6 +3,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateApartmentWithTenantDto {
 
-  @ApiProperty()
+  @ApiProperty({ example: '1'})
   tenantId: number;
 }

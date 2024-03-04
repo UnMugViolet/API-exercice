@@ -2,11 +2,11 @@ import { IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateApartmentTypeDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Myname'})
   @IsString()
   type: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 4})
   @IsNumber()
   maxOccupancy: number;
 }

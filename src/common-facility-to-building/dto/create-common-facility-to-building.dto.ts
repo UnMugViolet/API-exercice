@@ -4,16 +4,16 @@ import { CreateBuildingDto } from 'src/building/dto/create-building.dto';
 import { CreateCommonFacilityDto } from 'src/common-facility/dto/create-common-facility.dto';
 
 export class CreateCommonFacilityToBuildingDto {
-  @ApiProperty()
+  @ApiProperty({ example: '2024-03-04T10:51:00.647Z'})
   @IsNotEmpty()
   @IsDate()
   date: Date;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'CommonFacilityToBuilding name'})
   @IsNotEmpty()
   commonFacility: CreateCommonFacilityDto;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Building name'})
   @IsNotEmpty()
   building: CreateBuildingDto;
 }

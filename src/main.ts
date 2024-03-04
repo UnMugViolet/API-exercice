@@ -11,10 +11,9 @@ async function bootstrap() {
   await seeder.seedAll();
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Exam API - Address handler with Swagger | Paul Jaguin')
+    .setDescription('This API is used  to manage real estate creating the address, building, apartment, owner, tenant, common facility, and options linked to them.')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

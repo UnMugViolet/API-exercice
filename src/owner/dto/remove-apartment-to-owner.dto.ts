@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class RemoveApartmentFromOwnerDto {
-  @ApiProperty()
+  @ApiProperty({ example: 1})
   apartmentId: number;
 }

@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body,  Param, Delete, NotFoundException, Put} fr
 import { CommonFacilityService } from './common-facility.service';
 import { CreateCommonFacilityDto } from './dto/create-common-facility.dto';
 import { UpdateCommonFacilityDto } from './dto/update-common-facility.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Common Facility')
 @Controller('common-facility')
@@ -10,11 +10,20 @@ export class CommonFacilityController {
   constructor(private readonly commonFacilityService: CommonFacilityService) {}
 
   @Post('createCommonFacility')
-  create(@Body() createCommonFacilityDto: CreateCommonFacilityDto) {
-    return this.commonFacilityService.create(createCommonFacilityDto);
+  @ApiOperation({ summary: 'Create a new common facility' })
+  @ApiBody ({ type: CreateCommonFacilityDto })
+  @ApiResponse({ status: 201, description: 'The common facility has been successfully created.'})
+  @ApiResponse({ status: 400, description: 'Invalid input.'})
+  async create(@Body() createCommonFacilityDto: CreateCommonFacilityDto) {
+    await this.commonFacilityService.create(createCommonFacilityDto);
+    return 'Common facility has been successfully created !';
   }
 
   @Get('findAllCommonFacilities')
+  @ApiOperation({ summary: 'Find all common facilities' })
+  @ApiBody({ type: CreateCommonFacilityDto })
+  @ApiResponse({ status: 201, description: 'List of all common facilities.'})
+  @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findAll() {
     const commonFacility = await this.commonFacilityService.findAll();
     if (!commonFacility || commonFacility.length === 0) {
@@ -24,6 +33,10 @@ export class CommonFacilityController {
   }
 
   @Get(':id/findOneCommonFacility')
+  @ApiOperation({ summary: 'Find a common facility by ID' })
+  @ApiBody({ type: CreateCommonFacilityDto })
+  @ApiResponse({ status: 201, description: 'Common facility found.'})
+  @ApiResponse({ status: 400, description: 'Invalid input.'})
   async findOne(@Param('id') id: string) {
     const commonFacilities = await this.commonFacilityService.findOne(+id);
     if (!commonFacilities) {
@@ -33,6 +46,10 @@ export class CommonFacilityController {
   }
 
   @Put(':id/updateCommonFacility')
+  @ApiOperation({ summary: 'Update a common facility' })
+  @ApiBody({ type: UpdateCommonFacilityDto })
+  @ApiResponse({ status: 201, description: 'Common facility updated.'})
+  @ApiResponse({ status: 400, description: 'Invalid input.'})
   update(@Param('id') id: string, @Body() updateCommonFacilityDto: UpdateCommonFacilityDto) {
     const commonFacility = this.commonFacilityService.update(+id, updateCommonFacilityDto);
     if (!commonFacility) {
@@ -42,6 +59,9 @@ export class CommonFacilityController {
   }
 
   @Delete(':id/removeCommonFacility')
+  @ApiOperation({ summary: 'Remove a common facility' })
+  @ApiResponse({ status: 201, description: 'Common facility removed.'})
+  @ApiResponse({ status: 400, description: 'Invalid input.'})
   async remove(@Param('id') id: string) {
     const commonFacility = await this.commonFacilityService.remove(+id);
     if (!commonFacility) {

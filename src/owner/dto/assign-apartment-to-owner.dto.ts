@@ -1,9 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class AssignApartmentToOwnerDto {
-  @ApiProperty()
+  @ApiProperty({ example: 1})
   ownerId: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1})
   apartmentId: number;
 }

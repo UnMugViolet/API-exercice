@@ -3,10 +3,10 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateApartmentWitOptionDto {
 
-  @ApiProperty()
+  @ApiProperty({ example: '1'})
   apartmentId: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: [1, 2]})
   optionIds: number[];
   
 }
